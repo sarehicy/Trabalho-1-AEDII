@@ -72,9 +72,7 @@ int lerRegistro(FILE *arq, reg *registro){
     verificarReg(registro);
 
 
-    /*========================================================
-            Verificando se registro foi removido
-    ========================================================*/
+    /*   #   Verificando se Registro foi Removido   # */
 
     fread(&(registro->rem), sizeof(char), 1, arq);
 
@@ -84,9 +82,7 @@ int lerRegistro(FILE *arq, reg *registro){
         return 1;
     }
     
-    /*========================================================
-            Leitura dos demais campo do registro
-    ========================================================*/
+    /*   #   Leituras dos Campos do Registro    # */
 
     /* Campos de tamanho fixo */
     fread(&(registro->prox), sizeof(int), 1, arq);
@@ -127,9 +123,7 @@ int lerRegistro(FILE *arq, reg *registro){
         free(aux);
     }
     
-    /*======================================================
-                        Tratamento do Lixo
-    ========================================================
+    /*   #   Tratamento do Lixo    # 
     
      1) Calcula a quantidade de lixo: tamanho do registro - bytes utilizados
      2) Move o ponteiro com fseek para o inicio do próximo registro*/
