@@ -10,10 +10,7 @@ void funcUm(dadosHeader *dados){
     char inCsv[100], outBin[100];
     scanf("%s %s", &inCsv, &outBin);
 
-
-    /*----------------------------------------------------------
-                 ABRINDO E VERIFICANDO ARQUIVOS
-    ----------------------------------------------------------*/
+    /*   #   Abrindo e Verificando Arquivos    # */
 
     FILE *arqCsv = fopen(inCsv, "r");
     verificarArq(arqCsv);
@@ -22,9 +19,8 @@ void funcUm(dadosHeader *dados){
     FILE *arqBin = fopen(outBin, "wb");
     verificarArq(arqBin);
 
-    /*----------------------------------------------------------
-                     LENDO CSV E ESCREVENDO BIN
-    ----------------------------------------------------------*/
+
+    /*   #   Registro no arqCsv -> Registro no arqBin   # */
 
     // Muda status do arquivo para inconsistente enquanto são realizadas escritas
     cabecalho->status = '0';
@@ -44,9 +40,8 @@ void funcUm(dadosHeader *dados){
     // Escreve o cabeçalho final no arquivo bin
     escreverHeader(arqBin, cabecalho);
    
-    /*-------------------------------------------------------------
-        FINALIZANDO A FUNÇÃO (FECHANDO ARQUIVOS E BINARIO NA TELA)
-    ----------------------------------------------------------*/
+    /*   #   Fechando Arquivos e BinarioNaTela()    # */
+
     free(registro);
     free(cabecalho);
     fclose(arqCsv);
