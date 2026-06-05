@@ -1,0 +1,226 @@
+#include "funcionalidades.h"
+
+void funcDois(){
+    reg *registro = malloc(sizeof(reg));
+    verificarReg(registro);
+
+    header *cabecalho = malloc(sizeof(header));
+    verificarHeader;
+
+    // Lê nome do arquivo bin
+    char inBin[100];
+    scanf("%s", inBin);
+    
+    FILE *arqBin = fopen(inBin, "rb");
+    verificarArq(arqBin);
+    lerCabecalho(arqBin, cabecalho);
+
+    /*   #   Leitura e Impressão dos Registros   # */
+
+    while(check_eof(arqBin)){
+        inicializarRegistro(registro);      // "Zera" campos da struct antes da leitura para não misturar informações
+        if (!lerRegistro(arqBin, registro)) // Tenta ler registro do arquivo bin
+            imprimirRegistro(registro);     // Se conseguir ler, imprime registro
+    } 
+
+    free(registro);
+    fclose(arqBin);
+}
+
+void funcTres(){
+    reg *registro = malloc(sizeof(reg));
+    verificarReg(registro);
+
+    header *cabecalho = malloc(sizeof(header));
+    verificarHeader;
+   
+    char inBin[100];            
+    int qtdBuscas;              
+    int qtdCampos;
+
+    
+    scanf("%s", inBin);
+    scanf("%d", &qtdBuscas);
+
+    // # Abertura e verificação de arquivos # // 
+    
+    FILE *arqBin = fopen(inBin, "rb");
+    verificarArq(arqBin);
+    lerCabecalho(arqBin, cabecalho);
+
+
+    //      # Realização das buscas #         // 
+
+    // Loop 1: Realiza uma busca.
+    for (int i = 0; i < qtdBuscas; i++){
+        
+        scanf("%d", &qtdCampos);
+        char *linha[qtdCampos*2];           // Vetor com os *pares "campo" e "valor" 
+
+        montarBusca(linha, qtdCampos);
+
+        // Quantidade de vezes que a busca foi bem sucedida
+        // É usado para controlar a mensagem de erro "Registro não encontrado"
+        int buscaSucesso = 0;
+
+        while(check_eof(arqBin)){
+            inicializarRegistro(registro);
+
+            if (lerRegistro(arqBin, registro))
+                continue;
+
+            if (buscaRegistro(registro, linha, qtdCampos)){
+                imprimirRegistro(registro);
+                buscaSucesso++;
+            }
+        }
+
+        // Se não houver sucesso na busca, imprime a mensagem "Registro inexistente"
+        if (buscaSucesso == 0)
+                printf("Registro inexistente.\n");
+
+        // Imprime uma quebra de linha caso não seja a última iteração
+        if(i != qtdBuscas-1)
+            printf("\n");
+        
+        //Retorna o ponteiro para o primeiro registro para realizar uma nova busca
+        fseek(arqBin, 17, SEEK_SET);
+        desalocaVetorDePonteiros(linha, qtdCampos*2);
+    }
+
+    free(registro);
+    fclose(arqBin);
+}
+
+void funcQuatro(){
+    reg *registro = malloc(sizeof(reg));
+
+    header *cabecalho = malloc(sizeof(header));
+    verificarHeader;
+
+    // Lê nome do arquivo binário e RRN
+    char inBin[100];
+    int RRN;
+
+    scanf("%s %d", &inBin, &RRN);
+
+    /*----------------------------------------------------------
+                 ABRINDO E VERIFICANDO ARQUIVOS
+    ----------------------------------------------------------*/
+
+    FILE *arqBin = fopen(inBin, "rb");
+    verificarArq(arqBin);
+    lerCabecalho(arqBin, cabecalho);
+    
+    /*----------------------------------------------------------
+                 LENDO E IMPRIMINDO REGISTRO
+    ----------------------------------------------------------*/
+
+    movePonteiroRRN(arqBin, RRN);   // Move o ponteiro para o registro de RRN informado
+
+    inicializarRegistro(registro);      // Inicializa registro com valores padrão
+    if(!lerRegistro(arqBin, registro))  // Tenta ler registro do RRN indicado
+        imprimirRegistro(registro);     // Se conseguir ler, imprime o registro
+    else
+        printf("Registro inexistente.\n");  // Se não, imprime mensagem de erro
+
+
+    free(registro);
+    fclose(arqBin);
+}
+
+void funcSeis(){
+    reg *registro = malloc(sizeof(reg));
+    verificarReg(registro);
+
+    header *cabecalho = malloc(sizeof(header));
+    verificarHeader;
+
+    headerIndex *cabecalhoIndex = malloc(sizeof(headerIndex));
+   
+    char inBin[100];            
+    char inBinIndex[100];
+    int qtdBuscas;              
+    int qtdCampos;
+
+    
+    scanf("%s", inBin);
+    scanf("%s", inBinIndex);
+    scanf("%d", &qtdBuscas);
+
+    // # Abertura e verificação de arquivos # // 
+    
+    FILE *arqBin = fopen(inBin, "rb");
+    verificarArq(arqBin);
+    FILE *arqBinIndex = fopen(inBinIndex, "rb");
+    verificarArq(arqBinIndex);
+
+    lerCabecalho(arqBin, cabecalho);
+    lerCabecalhoIndex(arqBinIndex, cabecalhoIndex);
+
+    //      # Realização das buscas #         // 
+
+    // Loop 1: Realiza uma busca.
+    for (int i = 0; i < qtdBuscas; i++){
+        
+        scanf("%d", &qtdCampos);
+        char *linha[qtdCampos*2];           // Vetor com os *pares "campo" e "valor" 
+
+        montarBusca(linha, qtdCampos);
+
+        int buscaIndexSucesso = 0;
+        for(int j = 0; j<qtdCampos*2; j+=2){    // Se algum campo for codEstacao
+            if(linha[j] == "codEstacao"){       // Faz a busca indexada
+
+                int RRNbusca = buscaIndexada(arqBinIndex, atoi(linha[j+1]));
+                // Se nao encontrou sai do laço
+                if(RRNbusca == -1){
+                    printf("Registro Inexistente.\n");
+                    break;
+                }
+                // Se encontrou imprime o registro
+                movePonteiroRRN(arqBin, RRNbusca);
+                lerRegistro(arqBin, registro);
+                imprimirRegistro(registro);
+                buscaIndexSucesso++;
+            }
+        }
+
+        // Como o valor de codEstacao é unico, se encontrou, pode seguir para a proxima busca.
+        if(buscaIndexSucesso >=1){
+            continue;
+        }
+
+        // Quantidade de vezes que a busca foi bem sucedida
+        // É usado para controlar a mensagem de erro "Registro não encontrado"
+        int buscaSucesso = 0;
+
+        while(check_eof(arqBin)){
+            inicializarRegistro(registro);
+
+            if (lerRegistro(arqBin, registro))
+                continue;
+
+            if (buscaRegistro(registro, linha, qtdCampos)){
+                imprimirRegistro(registro);
+                buscaSucesso++;
+            }
+        }
+
+        // Se não houver sucesso na busca, imprime a mensagem "Registro inexistente"
+        if (buscaSucesso == 0)
+                printf("Registro inexistente.\n");
+
+        // Imprime uma quebra de linha caso não seja a última iteração
+        if(i != qtdBuscas-1)
+            printf("\n");
+        
+        //Retorna o ponteiro para o primeiro registro para realizar uma nova busca
+        fseek(arqBin, 17, SEEK_SET);
+        desalocaVetorDePonteiros(linha, qtdCampos*2);
+    }
+
+    free(registro);
+    fclose(arqBin);
+    fclose(arqBinIndex);
+}
