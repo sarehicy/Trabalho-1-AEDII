@@ -25,4 +25,8 @@ int lerRegistro(FILE *arq, reg *registro);
 /* Lê cabeçalho do arquivo binario e verifica consistência do arquivo*/
 int lerCabecalho(FILE *arq, header *cabecalho);
 
+/* Lê cabeçalho do arquivo binario índice e verifica consistência do arquivo*/
+lerCabecalhoIndex(FILE *arq, headerIndex *cabecalho);
+
+
 #endif
