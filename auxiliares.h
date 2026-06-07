@@ -45,6 +45,8 @@ void heapifyIndice(regIndex *vetRegistroIndex, int n, int i);
 void troca(regIndex *a, regIndex *b);
 void printArray(int arr[], int n);
 
+/* Realiza busca binária no arquivo e retorna RRN do registro com determinado código estação.
+Retorna -1 se não conseguir encontrar o registro.*/
 int buscaIndexada(FILE *arq, int codEstacao);
 
 #endif
