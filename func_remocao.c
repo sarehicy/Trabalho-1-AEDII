@@ -51,7 +51,7 @@ void funcSete(dadosHeader *dados){
                 if (RRN != -1){
                     movePonteiroRRN(arqBin, RRN);
                     inicializarRegistro(registro);
-                    lerRegistro(arqBin, registro);
+                    if (lerRegistro(arqBin, registro)) break;
 
                     if(buscaRegistro(registro, linha, qtdCampos)){
                         registro->rem = '1';
