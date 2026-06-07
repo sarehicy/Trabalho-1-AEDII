@@ -244,7 +244,7 @@ int buscaIndexada(FILE *arq, int codEstacao){
     return -1;
 }
 
-void removeRegistroIndex(char *nomeArq, int RRN){
+FILE *removeRegistroIndex(char *nomeArq, int RRN){
     FILE *arqOrigem = fopen(nomeArq, "rb"); verificarArq(arqOrigem);
     FILE *arqDestino = fopen("temp.bin", "wb"); verificarArq(arqDestino);
 
@@ -266,4 +266,6 @@ void removeRegistroIndex(char *nomeArq, int RRN){
 
     remove(nomeArq); //deleta arquivo não modificado
     rename("temp.bin", nomeArq);
+    arqDestino = fopen(nomeArq, "rb");  verificarArq(arqDestino);
+    return arqDestino;
 }
