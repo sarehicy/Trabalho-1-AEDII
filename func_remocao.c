@@ -43,14 +43,12 @@ void funcSete(dadosHeader *dados){
 
         /*      # Busca por codEstacao #        */
 
-        for (int i = 0; i < qtdCampos; i+=2){
+        for (int i = 0; i < (qtdCampos*2); i+=2){
             if (!(strcmp(linha[i], "codEstacao"))){
-                printf("Busca com codEstacao!!\n");
                 RRN = buscaIndexada(arqBinIndex, atoi(linha[i+1]));
 
                 // registro com codEstacao encontrado, compara demais campos da busca
                 if (RRN != -1){
-                    printf("RRN encontrado!\n");
                     movePonteiroRRN(arqBin, RRN);
                     inicializarRegistro(registro);
                     lerRegistro(arqBin, registro);
@@ -66,17 +64,9 @@ void funcSete(dadosHeader *dados){
                         escreverRegistro(arqBin, registro);
                         atualizarHeader(cabecalho, dados, registro, rmv);
                         RRN = -1;
-                    } else{
-                        printf("RRN não encontrado!\n");
-                        printf("Registro Inexistente.\n");
-                        break;
-                    }
-                
+                    } else break;
 
-                } else{
-                        printf("Registro Inexistente.\n");
-                        break;
-                    }
+                } else break;
 
             }
         }
@@ -85,7 +75,7 @@ void funcSete(dadosHeader *dados){
         if (RRN != 0 ) continue;
 
        /* # Busca Normal # */
-        RRN = -1; fseek(arqBin, 0, SEEK_SET); 
+        RRN = -1; fseek(arqBin, tamCabecalho, SEEK_SET); 
         while(check_eof(arqBin)){
             RRN++;
             //debug printf("Registro de rrn %d\n", RRN);
