@@ -71,7 +71,9 @@ void funcSete(dadosHeader *dados){
                         movePonteiroRRN(arqBin, RRN);
                         escreverRegistro(arqBin, registro);
                         atualizarHeader(cabecalho, dados, registro, rmv);
-                        
+                        fclose(arqBinIndex);
+                        arqBinIndex = removeRegistroIndex(inBinIndex, RRN);
+
                         RRN = -1;
                     } else break;
 
@@ -125,6 +127,7 @@ void funcSete(dadosHeader *dados){
     free(cabecalho);
     
     BinarioNaTela(inBin);
+    BinarioNaTela(inBinIndex);
     // Realiza busca e remove arquivo
     // É necessário atualizar cabeçalho do arqBin
     // É necessário atualizar arquivo inBinIndex
