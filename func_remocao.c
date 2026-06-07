@@ -1,23 +1,31 @@
 #include "funcionalidades.h"
 
 void funcSete(dadosHeader *dados){
-
+    /*      # structs #     */
     reg *registro = malloc(sizeof(reg));
     verificarReg(registro);
 
     header *cabecalho = malloc(sizeof(header));
     verificarHeader(cabecalho);
 
-    /* # User Input #*/
+    headerIndex *cabecalhoIndex = malloc(sizeof(headerIndex));
+    if (!cabecalhoIndex) exit(0);
+
+
+
+    /*      # User Input #      */
     char inBin[100], inBinIndex[100]; int n;
     scanf("%s %s %d", inBin, inBinIndex, &n);
     
-    /* # Abrindo Arquivos #*/
+
+
+    /*      # Abrindo Arquivos #      */
     FILE *arqBin = fopen(inBin, "rb+");
     verificarArq(arqBin);
-    FILE *arqBinIndex = fopen(inBinIndex, "wb");
+    FILE *arqBinIndex = fopen(inBinIndex, "rb");
     verificarArq(arqBinIndex);
 
+    lerCabecalhoIndex(arqBinIndex, cabecalhoIndex);
     lerCabecalho(arqBin, cabecalho);
     montarDadosHeader(arqBin, registro, dados);
     //Pois a função montarDados header move ponteiro para o final do arquivo
@@ -63,6 +71,7 @@ void funcSete(dadosHeader *dados){
                         movePonteiroRRN(arqBin, RRN);
                         escreverRegistro(arqBin, registro);
                         atualizarHeader(cabecalho, dados, registro, rmv);
+                        
                         RRN = -1;
                     } else break;
 
