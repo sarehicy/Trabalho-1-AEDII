@@ -49,4 +49,8 @@ void printArray(int arr[], int n);
 Retorna -1 se não conseguir encontrar o registro.*/
 int buscaIndexada(FILE *arq, int codEstacao);
 
+/*Remove registro com um determinado RRN do arquivo Index*/
+void removeRegistroIndex(char *nomeArq, int RRN);
+
+
 #endif

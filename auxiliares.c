@@ -90,7 +90,7 @@ void movePonteiroRRN(FILE *arq, int rrn){
 
     // Verifica se o RRN buscado existe no arquivo
     if(rrn >= proxrrn){
-        printf("Registro inexistente.");
+        // desnecessario printf("Registro inexistente.");
         exit(0);
     }
 
@@ -221,8 +221,8 @@ int buscaIndexada(FILE *arq, int codEstacao){
         // Calculo da posição do RRN
         fseek(arq, 1+(meio*8), SEEK_SET);
 
-        //malloca um registro e le
-        regIndex *registro = malloc(sizeof(regIndex));
+        //malloca um registro e lê
+        regIndex *registro = malloc(sizeof(regIndex)); if (!registro) exit(0);
         lerRegistroIndex(arq, registro);
 
         // se encontrou, retorna o RRN
@@ -242,4 +242,28 @@ int buscaIndexada(FILE *arq, int codEstacao){
     }
     //se nao achou retorna -1
     return -1;
+}
+
+void removeRegistroIndex(char *nomeArq, int RRN){
+    FILE *arqOrigem = fopen(nomeArq, "rb"); verificarArq(arqOrigem);
+    FILE *arqDestino = fopen("temp.bin", "wb"); verificarArq(arqDestino);
+
+    regIndex *registro = malloc(sizeof(regIndex));
+    if (!registro) exit(0);
+
+    fseek(arqOrigem, 1, SEEK_SET); //Pula cabeçalho
+
+    while(check_eof(arqOrigem)){
+        lerRegistroIndex(arqOrigem, registro);
+        if (registro->RRN != RRN){
+            fwrite(&(registro->codEstacao), sizeof(int), 1, arqDestino);
+            fwrite(&(registro->RRN), sizeof(int), 1, arqDestino);
+        }
+    }
+
+    fclose(arqOrigem);
+    fclose(arqDestino);
+
+    remove(nomeArq); //deleta arquivo não modificado
+    rename("temp.bin", nomeArq);
 }
