@@ -240,12 +240,3 @@ void liberarDadosHeader(dadosHeader *dados) {
     free(dados->pares);
     free(dados);
 }
-
-void lerCabecalhoIndex(FILE *arqBinIndex, headerIndex *cabecalhoIndex){
-    fread(&(cabecalhoIndex->status), sizeof(char), 1, arqBinIndex);
-
-    if(cabecalhoIndex->status == inconsistente){
-        printf("Falha no processamento do arquivo.");
-        exit(0);
-    }
-}

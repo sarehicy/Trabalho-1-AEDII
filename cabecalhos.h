@@ -50,6 +50,4 @@ void montarDadosHeader(FILE *arqBin, reg *registro, dadosHeader *dados);
 /* Libera memória alocada para struct dadosHeader */
 void liberarDadosHeader(dadosHeader *dados);
 
-void lerCabecalhoIndex(FILE *arqBinIndex, headerIndex *cabecalhoIndex);
-
 #endif

@@ -134,7 +134,7 @@ int lerRegistro(FILE *arq, reg *registro){
     return 0;
 }
 
-int lerCabecalho(FILE *arq, header *cabecalho){
+void lerCabecalho(FILE *arq, header *cabecalho){
     verificarArq(arq);
     verificarHeader(cabecalho);
 
@@ -156,16 +156,16 @@ int lerCabecalho(FILE *arq, header *cabecalho){
     fread(&(cabecalho->totalPares), sizeof(int), 1, arq);
 }
 
-lerCabecalhoIndex(FILE *arq, headerIndex *cabecalho){
+void lerCabecalhoIndex(FILE *arq, headerIndex *cabecalho){
     verificarArq(arq);
     if(!cabecalho) exit(0);
 
     // Garante que está no começo do arquivo
     fseek(arq, 0, SEEK_SET);
 
-    read(&(cabecalho->status), sizeof(char), 1, arq);
+    fread(&(cabecalho->status), sizeof(char), 1, arq);
 
-    if(cabecalho->status == '0'){
+    if(cabecalho->status == inconsistente){
         printf("Falha no processamento do arquivo.");
         exit(0);
     }
