@@ -18,28 +18,74 @@ void funcSete(dadosHeader *dados){
     FILE *arqBinIndex = fopen(inBinIndex, "wb");
     verificarArq(arqBinIndex);
 
-    //debug printf("oi\n");
     lerCabecalho(arqBin, cabecalho);
     montarDadosHeader(arqBin, registro, dados);
-
-    
     //Pois a função montarDados header move ponteiro para o final do arquivo
     fseek(arqBin, tamCabecalho, SEEK_SET); 
 
+    /*      # Buscas #       */
+
+    cabecalho->status = inconsistente; // porque vai escrever no arq
+    escreverHeader(arqBin, cabecalho);
 
     int qtdCampos;
     while(n--){
 
         scanf("%d", &qtdCampos);
         char *linha[qtdCampos*2]; 
-
         montarBusca(linha, qtdCampos);
 
-        cabecalho->status = inconsistente; // pq vai escrever no arq
-        escreverHeader(arqBin, cabecalho);
+        //cabecalho->status = inconsistente; // porque vai escrever no arq
+        //escreverHeader(arqBin, cabecalho);
 
-        int RRN = -1;   //RRN do registro lido
+        int RRN = 0;    //Guarda RRN do registro cujos campos estão sendo comparados
 
+
+        /*      # Busca por codEstacao #        */
+
+        for (int i = 0; i < qtdCampos; i+=2){
+            if (!(strcmp(linha[i], "codEstacao"))){
+                printf("Busca com codEstacao!!\n");
+                RRN = buscaIndexada(arqBinIndex, atoi(linha[i+1]));
+
+                // registro com codEstacao encontrado, compara demais campos da busca
+                if (RRN != -1){
+                    printf("RRN encontrado!\n");
+                    movePonteiroRRN(arqBin, RRN);
+                    inicializarRegistro(registro);
+                    lerRegistro(arqBin, registro);
+
+                    if(buscaRegistro(registro, linha, qtdCampos)){
+                        registro->rem = '1';
+
+                        registro->prox = cabecalho->topo;
+                        cabecalho->topo = RRN;
+
+                        // Move ponteiro para inicio do registro de rrn removido p escrever
+                        movePonteiroRRN(arqBin, RRN);
+                        escreverRegistro(arqBin, registro);
+                        atualizarHeader(cabecalho, dados, registro, rmv);
+                        RRN = -1;
+                    } else{
+                        printf("RRN não encontrado!\n");
+                        printf("Registro Inexistente.\n");
+                        break;
+                    }
+                
+
+                } else{
+                        printf("Registro Inexistente.\n");
+                        break;
+                    }
+
+            }
+        }
+
+        // De alguma forma, a busca por codEstacao foi realizada, então não realiza a busca normal
+        if (RRN != 0 ) continue;
+
+       /* # Busca Normal # */
+        RRN = -1; fseek(arqBin, 0, SEEK_SET); 
         while(check_eof(arqBin)){
             RRN++;
             //debug printf("Registro de rrn %d\n", RRN);
@@ -65,17 +111,14 @@ void funcSete(dadosHeader *dados){
                 movePonteiroRRN(arqBin, RRN);
                 escreverRegistro(arqBin, registro);
                 atualizarHeader(cabecalho, dados, registro, rmv);
-                
             }
 
         }
 
-        cabecalho->status = consistente; // pq vai escrever no arq
-        escreverHeader(arqBin, cabecalho);
-
-
        desalocaVetorDePonteiros(linha, qtdCampos*2);
     }
+    cabecalho->status = consistente;
+    escreverHeader(arqBin, cabecalho);
 
     fclose(arqBin);
     fclose(arqBinIndex);
