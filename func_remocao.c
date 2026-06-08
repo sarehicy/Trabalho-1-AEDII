@@ -48,8 +48,6 @@ void funcSete(dadosHeader *dados){
         //escreverHeader(arqBin, cabecalho);
 
         int RRN = -2;    //Guarda RRN do registro cujos campos estão sendo comparados
-
-
         /*      # Busca por codEstacao #        */
 
         for (int i = 0; i < (qtdCampos*2); i+=2){
@@ -74,8 +72,6 @@ void funcSete(dadosHeader *dados){
                         atualizarHeader(cabecalho, dados, registro, rmv);
                         fclose(arqBinIndex);
                         arqBinIndex = removeRegistroIndex(inBinIndex, RRN);
-
-                        RRN = -1;
                     } else break;
 
                 } else break;
