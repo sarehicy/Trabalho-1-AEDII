@@ -34,6 +34,7 @@ void funcSete(dadosHeader *dados){
     /*      # Buscas #       */
 
     cabecalho->status = inconsistente; // porque vai escrever no arq
+    cabecalhoIndex->status = inconsistente;
     escreverHeader(arqBin, cabecalho);
 
     int qtdCampos;
@@ -46,7 +47,7 @@ void funcSete(dadosHeader *dados){
         //cabecalho->status = inconsistente; // porque vai escrever no arq
         //escreverHeader(arqBin, cabecalho);
 
-        int RRN = 0;    //Guarda RRN do registro cujos campos estão sendo comparados
+        int RRN = -2;    //Guarda RRN do registro cujos campos estão sendo comparados
 
 
         /*      # Busca por codEstacao #        */
@@ -83,9 +84,12 @@ void funcSete(dadosHeader *dados){
         }
 
         // De alguma forma, a busca por codEstacao foi realizada, então não realiza a busca normal
-        if (RRN != 0 ) continue;
+        if (RRN != -2 ){
+            desalocaVetorDePonteiros(linha, qtdCampos*2);
+            continue;
+        }
 
-       /* # Busca Normal # */
+       /*       # Busca Normal #       */
         RRN = -1; fseek(arqBin, tamCabecalho, SEEK_SET); 
         while(check_eof(arqBin)){
             RRN++;
@@ -112,6 +116,8 @@ void funcSete(dadosHeader *dados){
                 movePonteiroRRN(arqBin, RRN);
                 escreverRegistro(arqBin, registro);
                 atualizarHeader(cabecalho, dados, registro, rmv);
+                fclose(arqBinIndex);
+                arqBinIndex = removeRegistroIndex(inBinIndex, RRN);
             }
 
         }
@@ -120,6 +126,8 @@ void funcSete(dadosHeader *dados){
     }
     cabecalho->status = consistente;
     escreverHeader(arqBin, cabecalho);
+    cabecalhoIndex->status = consistente;
+    fseek(arqBinIndex, 0, SEEK_SET); fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqBinIndex);
 
     fclose(arqBin);
     fclose(arqBinIndex);
