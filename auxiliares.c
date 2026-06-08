@@ -251,7 +251,9 @@ FILE *removeRegistroIndex(char *nomeArq, int RRN){
     regIndex *registro = malloc(sizeof(regIndex));
     if (!registro) exit(0);
 
-    fseek(arqOrigem, 1, SEEK_SET); //Pula cabeçalho
+    char status;
+    fread(&(status), sizeof(char), 1, arqOrigem);
+    fwrite(&(status), sizeof(char), 1, arqDestino);
 
     while(check_eof(arqOrigem)){
         lerRegistroIndex(arqOrigem, registro);
