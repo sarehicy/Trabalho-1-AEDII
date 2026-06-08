@@ -34,8 +34,9 @@ void funcSete(dadosHeader *dados){
     /*      # Buscas #       */
 
     cabecalho->status = inconsistente; // porque vai escrever no arq
-    cabecalhoIndex->status = inconsistente;
     escreverHeader(arqBin, cabecalho);
+    cabecalhoIndex->status = inconsistente;
+    escreverHeader(arqBinIndex, cabecalhoIndex);
 
     int qtdCampos;
     while(n--){
@@ -43,9 +44,6 @@ void funcSete(dadosHeader *dados){
         scanf("%d", &qtdCampos);
         char *linha[qtdCampos*2]; 
         montarBusca(linha, qtdCampos);
-
-        //cabecalho->status = inconsistente; // porque vai escrever no arq
-        //escreverHeader(arqBin, cabecalho);
 
         int RRN = -2;    //Guarda RRN do registro cujos campos estão sendo comparados
         /*      # Busca por codEstacao #        */
@@ -66,7 +64,7 @@ void funcSete(dadosHeader *dados){
                         registro->prox = cabecalho->topo;
                         cabecalho->topo = RRN;
 
-                        // Move ponteiro para inicio do registro de rrn removido p escrever
+                        // Move ponteiro para inicio do registro de rrn removido p reescrever registro com campos modificados
                         movePonteiroRRN(arqBin, RRN);
                         escreverRegistro(arqBin, registro);
                         atualizarHeader(cabecalho, dados, registro, rmv);
@@ -123,8 +121,8 @@ void funcSete(dadosHeader *dados){
     cabecalho->status = consistente;
     escreverHeader(arqBin, cabecalho);
     cabecalhoIndex->status = consistente;
-    fseek(arqBinIndex, 0, SEEK_SET); fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqBinIndex);
-
+    escreverHeaderIndex(arqBinIndex, cabecalhoIndex);
+    
     fclose(arqBin);
     fclose(arqBinIndex);
     free(registro);
