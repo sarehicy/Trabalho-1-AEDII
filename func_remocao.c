@@ -25,11 +25,10 @@ void funcSete(dadosHeader *dados){
     FILE *arqBinIndex = fopen(inBinIndex, "rb");
     verificarArq(arqBinIndex);
 
+    montarDadosHeader(arqBin, registro, dados);
+
     lerCabecalhoIndex(arqBinIndex, cabecalhoIndex);
     lerCabecalho(arqBin, cabecalho);
-    montarDadosHeader(arqBin, registro, dados);
-    //Pois a função montarDados header move ponteiro para o final do arquivo
-    fseek(arqBin, tamCabecalho, SEEK_SET); 
 
     /*      # Buscas #       */
 
@@ -122,7 +121,7 @@ void funcSete(dadosHeader *dados){
     escreverHeader(arqBin, cabecalho);
     cabecalhoIndex->status = consistente;
     escreverHeaderIndex(arqBinIndex, cabecalhoIndex);
-    
+
     fclose(arqBin);
     fclose(arqBinIndex);
     free(registro);

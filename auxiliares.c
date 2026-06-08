@@ -251,10 +251,12 @@ FILE *removeRegistroIndex(char *nomeArq, int RRN){
     regIndex *registro = malloc(sizeof(regIndex));
     if (!registro) exit(0);
 
+    /* # Leitura do status do arquivo índice #*/
     char status;
     fread(&(status), sizeof(char), 1, arqOrigem);
     fwrite(&(status), sizeof(char), 1, arqDestino);
 
+    /* # Leitura dos registros de dados do arquivo índice #*/
     while(check_eof(arqOrigem)){
         lerRegistroIndex(arqOrigem, registro);
         if (registro->RRN != RRN){
