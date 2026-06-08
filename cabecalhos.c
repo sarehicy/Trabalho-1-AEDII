@@ -39,6 +39,7 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
             for (int i = 0; i < qtdEst; i++){
                 if (!strcmp(tabela->estacoes[i], registro->nomeEstacao)){
                     tabela->estacoesOcorrencias[i] = tabela->estacoesOcorrencias[i]+ 1;
+                    //debug printf("nova ocorrencia de %s: %d\n", tabela->estacoes[i], tabela->estacoesOcorrencias[i]);
                     return;
 
                 }
@@ -88,15 +89,20 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
 
                 for (int j = i; j < (qtdEst-1); j++){
                     tabela->estacoes[j] = tabela->estacoes[j+1];
+                    tabela->estacoesOcorrencias[j] = tabela->estacoesOcorrencias[j+1];
                 }
 
                 (tabela->qtdEstacoes)--;
                 cabecalho->totalEstacoes = tabela->qtdEstacoes;
+               //debug printf("total estacoes caiu! \n", cabecalho->totalEstacoes);
 
                 char **aux = realloc(tabela->estacoes, sizeof(char *) * (tabela->qtdEstacoes +1));
-
                 if(!aux) exit(0);
                 tabela->estacoes = aux;
+
+                int *aux2 = realloc(tabela->estacoesOcorrencias, sizeof(int)* (tabela->qtdEstacoes +1) );
+                if (!aux) exit(0);
+                tabela->estacoesOcorrencias = aux2;
 
             }
 
@@ -220,6 +226,8 @@ dadosHeader *criarDadosHeader(){
 
 void montarDadosHeader(FILE *arqBin, reg *registro, dadosHeader *dados){
     header *aux = criarHeader();
+
+    fseek(arqBin, tamCabecalho, SEEK_SET);
 
     while(check_eof(arqBin)){
         inicializarRegistro(registro);
