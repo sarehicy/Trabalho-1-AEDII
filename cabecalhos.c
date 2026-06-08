@@ -27,14 +27,15 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
     int qtdEst = tabela->qtdEstacoes; 
 
     switch(op){
+        case insert:
         case add: // Inserção de registro
             // Incrementa o proxRRN livre
-            (cabecalho->proxRRN)++;
+
+            if (op == add) (cabecalho->proxRRN)++;
 
             inserirPar(cabecalho, tabela, (registro->codEstacao), (registro->codProxEstacao));
-            /* # Tratando a Quantidade de Estações */
-            
 
+            /*      # Tratando a Quantidade de Estações #       */
             //Se a estação já foi contabilizada, incrementa ocorrência e retorna da função
             for (int i = 0; i < qtdEst; i++){
                 if (!strcmp(tabela->estacoes[i], registro->nomeEstacao)){
@@ -46,16 +47,16 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
             }
             
             //debug printf("nova estacao: %s\n", registro->nomeEstacao);
-            // Insere nova estação na tabela de estações e incrementa contador de estações
+            // Insere nova estação na tabela de estações 
             tabela->estacoes[qtdEst] = malloc(sizeof(char)*((registro->tamNomeEstacao) + 1));
             strcpy(tabela->estacoes[qtdEst], registro->nomeEstacao);
-
             tabela->estacoesOcorrencias[qtdEst] = 1;
 
-
+            // Incrementa a quantidade total de estações
             (tabela->qtdEstacoes)++;
             cabecalho->totalEstacoes = tabela->qtdEstacoes;
 
+            // Realoca memória para vetor de estações e vetor de ocorrências
             char **aux = realloc(tabela->estacoes, sizeof(char *) * (tabela->qtdEstacoes +1));
             if (!aux) exit(0);
             tabela->estacoes = aux;
@@ -117,35 +118,19 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
 
 
 void inserirPar(header *cabecalho, dadosHeader *dados, int codEst, int codProx){
-
-
-
     // Se algum valor for nulo, o par não é valido
-
-        if (codEst <= 0 || codProx <= 0) return;
-
-
+    if (codEst <= 0 || codProx <= 0) return;
 
     //Realoca Pares para caber mais um par
-
     int (*temp)[2] = realloc(dados->pares, (dados->qtdPares + 1) * sizeof(int[2]));
-
     if (!temp) exit(0);
-
     dados->pares = temp;
 
-
-
-    // Se o par não existe em dados, adiciona o par aos dados 
-
+    // Adiciona o par aos dados 
     dados->pares[dados->qtdPares][0] = codEst;
-
     dados->pares[dados->qtdPares][1] = codProx;
 
-
-
     //e incrementa o total de pares nos dados e no cabeçalho
-
     (dados->qtdPares)++;
 
     (cabecalho->totalPares) = dados->qtdPares;

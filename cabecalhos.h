@@ -18,7 +18,8 @@
 
 #define tamCabecalho 17
 
-#define add 1       // Indica inserção de registro 
+#define add 1       // Indica inserção de registro no fim do arquivo
+#define insert 2     // Indica insersão de registro no meio do arquivo
 #define rmv 0       // Indica remoção de registro
 
 // Verifica integridade do ponteiro do cabeçalho
