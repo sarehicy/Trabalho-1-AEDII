@@ -16,4 +16,7 @@ void escreverRegistro(FILE *arq, reg *registro);
 /* Escreve o cabeçalho no arquivo binário   */
 void escreverHeader(FILE *arq, header *cabecalho);
 
+/*Escreve cabeçalho no arquivo índice*/
+void escreverHeaderIndex(FILE *arq, headerIndex *cabecalho);
+
 #endif

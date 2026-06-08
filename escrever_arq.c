@@ -58,3 +58,11 @@ void escreverHeader(FILE *arq, header *cabecalho){
     
     fwrite(&(cabecalho->totalPares), sizeof(int), 1, arq);
 }
+
+void escreverHeaderIndex(FILE *arq, headerIndex *cabecalho){
+    verificarArq(arq);
+    verificarHeaderIndex(cabecalho);
+    fseek(arq, 0, SEEK_SET);
+
+    fwrite(&(cabecalho->status), sizeof(char), 1, arq);
+}
