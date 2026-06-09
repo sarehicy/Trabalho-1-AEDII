@@ -38,7 +38,9 @@ int main(){
     case 7:  // Remove todos os registros que correspondem a uma busca
         funcSete(dados);
         break;
-        
+    case 8:
+        funcOito(dados);
+        break;
     default:
         break;
     }

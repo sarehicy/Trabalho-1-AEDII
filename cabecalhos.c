@@ -8,6 +8,14 @@ void verificarHeader(header *cabecalho){
     }
 }
 
+void verificarHeaderIndex(headerIndex *cabecalho){
+    if(!cabecalho){
+         printf("Falha no processamento do arquivo.\n");
+         exit(0);
+    }
+}
+
+
 header *criarHeader(){
     header *cabecalho = malloc(sizeof(header));
     verificarHeader(cabecalho);

@@ -15,6 +15,8 @@
 /* Verifica ponteiro da struct registro */
 void verificarReg(reg *registro);
 
+void verificarRegIndex(regIndex *registro);
+
 /* Inicializa registro de dados com valores default */
 void inicializarRegistro(reg *registro);
 
@@ -30,5 +32,7 @@ int buscaRegistro(reg *registro, char **linha, int qtdCampos);
 int buscaCampo(reg *registro, char campo[], char valor[]);
 
 void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex);
+
+void montarRegistroCmd(reg *registro);
 
 #endif

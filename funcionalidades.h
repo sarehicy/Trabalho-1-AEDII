@@ -39,4 +39,6 @@ void funcSeis();
 void funcSete(dadosHeader *dados);
 //testandoooo
 
+void funcOito(dadosHeader *dados);
+
 #endif

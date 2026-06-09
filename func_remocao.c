@@ -35,7 +35,7 @@ void funcSete(dadosHeader *dados){
     cabecalho->status = inconsistente; // porque vai escrever no arq
     escreverHeader(arqBin, cabecalho);
     cabecalhoIndex->status = inconsistente;
-    escreverHeader(arqBinIndex, cabecalhoIndex);
+    escreverHeaderIndex(arqBinIndex, cabecalhoIndex);
 
     int qtdCampos;
     while(n--){

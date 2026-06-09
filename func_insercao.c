@@ -2,13 +2,13 @@
 
 void funcOito(dadosHeader *dados){
     reg *registro = malloc(sizeof(reg));
-    verificarRegistro(registro);
+    verificarReg(registro);
     header *cabecalho = malloc(sizeof(header));
     verificarHeader(cabecalho);
     headerIndex *cabecalhoIndex = malloc(sizeof(headerIndex));
     verificarHeaderIndex(cabecalhoIndex);
     regIndex *registroIndex = malloc(sizeof(regIndex));
-    verficarRegIndex(registroIndex);
+    verificarRegIndex(registroIndex);
 
     char inBin[100];
     char inBinIndex[100];
