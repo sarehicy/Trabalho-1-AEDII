@@ -273,3 +273,40 @@ FILE *removeRegistroIndex(char *nomeArq, int RRN){
     arqDestino = fopen(nomeArq, "rb");  verificarArq(arqDestino);
     return arqDestino;
 }
+
+
+void reordenarArqIndex(FILE *arqIndex){
+    int capacidade = 10, i=0;
+    headerIndex *cabecalhoIndex = malloc(sizeof(headerIndex));
+    regIndex *vetRegistroIndex = malloc(sizeof(regIndex)*capacidade);
+    fseek(arqIndex, 1, SEEK_SET);
+    
+    while(check_eof(arqIndex)){
+        // Se a capacidade for atingida, aloca mais memória
+        if(i >= capacidade-1){
+            capacidade *= 2;
+            vetRegistroIndex = realloc(vetRegistroIndex, sizeof(regIndex)*capacidade);
+        }
+
+        fread(&(vetRegistroIndex[i].codEstacao), sizeof(int), 1, arqIndex);
+        fread(&(vetRegistroIndex[i].RRN), sizeof(int), 1, arqIndex);
+
+        i++;
+    }
+
+    ordenarIndiceHeap(vetRegistroIndex, i);
+
+    fseek(arqIndex, 0, SEEK_SET);
+
+    cabecalhoIndex->status = '0';
+    fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqIndex);
+
+    for(int j=0; j<i; j++){
+        fwrite(&(vetRegistroIndex[j].codEstacao), sizeof(int), 1, arqIndex);
+        fwrite(&(vetRegistroIndex[j].RRN), sizeof(int), 1, arqIndex);
+    }
+
+    cabecalhoIndex->status = '1';
+    fseek(arqIndex, 0, SEEK_SET);
+    fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqIndex);
+}

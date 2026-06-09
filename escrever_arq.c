@@ -66,3 +66,8 @@ void escreverHeaderIndex(FILE *arq, headerIndex *cabecalho){
 
     fwrite(&(cabecalho->status), sizeof(char), 1, arq);
 }
+
+void escreverRegIndex(FILE *arqIndex, regIndex *registroIndex){
+    fwrite(&(registroIndex->codEstacao), sizeof(int), 1, arqIndex);
+    fwrite(&(registroIndex->RRN), sizeof(int), 1, arqIndex);
+}

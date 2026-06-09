@@ -53,4 +53,6 @@ int buscaIndexada(FILE *arq, int codEstacao);
 FILE *removeRegistroIndex(char *nomeArq, int RRN);
 
 
+void reordenarArqIndex(FILE *arqIndex);
+
 #endif

@@ -19,4 +19,10 @@ void escreverHeader(FILE *arq, header *cabecalho);
 /*Escreve cabeçalho no arquivo índice*/
 void escreverHeaderIndex(FILE *arq, headerIndex *cabecalho);
 
+
+void escreverRegIndex(FILE *arqIndex, regIndex *registroIndex){
+    fwrite(&(registroIndex->codEstacao), sizeof(int), 1, arqIndex);
+    fwrite(&(registroIndex->RRN), sizeof(int), 1, arqIndex);
+}
+
 #endif
