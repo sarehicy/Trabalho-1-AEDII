@@ -16,30 +16,36 @@ void funcOito(dadosHeader *dados){
 
     scanf("%s", inBin);
     scanf("%s", inBinIndex);
-    scanf("%d", n);
+
+    int r = scanf("%d", &n);
 
     FILE *arqBin = fopen(inBin, "rb+");
+
     verificarArq(arqBin);
 
     FILE *arqBinIndex = fopen(inBinIndex, "rb+");
+
     verificarArq(arqBinIndex);
 
     montarDadosHeader(arqBin, registro, dados);
 
     lerCabecalho(arqBin, cabecalho);
+
     lerCabecalhoIndex(arqBin, cabecalhoIndex);
 
     // Para cada inserção
     for(int i = 0; i<n; i++){
-
         // Se não tiver registros lógicamente removidos
         if(cabecalho->topo == -1){
+
             montarRegistroCmd(registro);
 
             registroIndex->codEstacao = registro->codEstacao;
             registroIndex->RRN = cabecalho->proxRRN;
 
-            movePonteiroRRN(arqBin, cabecalho->proxRRN);
+            //movePonteiroRRN(arqBin, cabecalho->proxRRN);
+            fseek(arqBin, 0, SEEK_END);
+
             escreverRegistro(arqBin, registro);
             atualizarHeader(cabecalho, dados, registro, add);
 
@@ -53,6 +59,7 @@ void funcOito(dadosHeader *dados){
             RRNaux = registro->prox;
 
             montarRegistroCmd(registro);
+            registro->rem = '0';
 
             registroIndex->codEstacao = registro->codEstacao;
             registroIndex->RRN = cabecalho->proxRRN;

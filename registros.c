@@ -162,59 +162,35 @@ void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex){
 
 
 void montarRegistroCmd(reg *registro){  
-    // string que irá conter uma linha (registro) lido do arquivo csv
-    char *line = malloc(sizeof(char)*90);       
-    if(!line){
-        printf("Falha no processamento do arquivo.\n");
-        exit(0);
-    }
 
-    // Ponteiro para dar free() na line
-    char *aux = line;                       
-    
+    char buffer[100];
 
-    size_t n = 90;                              
-    getline(&line, &n, stdin);                    // lê uma linha no arqCsv
-    line[strcspn(line, "\r\n")] = '\0';
+    scanf("%d", &(registro->codEstacao));
 
-
-   /*========================================================
-            Campos no Arquivo -> Campos da Struct
-    ========================================================*/
-
-    char *p = strsep(&line, ",");               // lê código da estação na string
-    if(p && *p)                                 // verifica se p e o ponteiro de p existem
-        registro->codEstacao = atoi(p);         // guarda código da estação no registro (struct)
-
-    p = strsep(&line, ",");                     // lê nome da estação
-    strcpy(registro->nomeEstacao, p);           //copia nome da estação para o registro (struct)
-
-    p = strsep(&line, ",");                     
-    if(p && *p)                                 
-        registro->codLinha = atoi(p);           
-
-    p = strsep(&line, ",");                     
-    strcpy(registro->nomeLinha, p);            
-
-    p = strsep(&line, ",");                     
-    if(p && *p)                                 
-        registro->codProxEstacao = atoi(p);     
-
-    p = strsep(&line, ",");               
-    if(p && *p)                       
-        registro->distProxEstacao = atoi(p);  
-
-    p = strsep(&line, ",");                     
-    if(p && *p)                      
-        registro->codLinhaInteg = atoi(p);     
-    
-    p = strsep(&line, "\0");                     //se coloca isso pega o valor certo, mas imprime 0 no nulo
-    if(p && *p)                                  //verifica se p e o ponteiro de p existem
-        registro->codEstacaoInteg = atoi(p);    // guarda código da estação integ (?) no registro (struct)
-
-
+    ScanQuoteString(registro->nomeEstacao); 
     registro->tamNomeEstacao = strlen(registro->nomeEstacao);
+
+    scanf("%s", buffer);
+    if(!strcmp(buffer, "NULO")) registro->codLinha = -1;
+    else registro->codLinha = atoi(buffer);
+
+    ScanQuoteString(registro->nomeLinha); 
     registro->tamNomeLinha = strlen(registro->nomeLinha);
-    
-    free(aux);
+
+    scanf("%s", buffer);
+    if(!strcmp(buffer, "NULO")) registro->codProxEstacao = -1;
+    else registro->codProxEstacao = atoi(buffer);
+
+    scanf("%s", buffer);
+    if(!strcmp(buffer, "NULO")) registro->distProxEstacao = -1;
+    else registro->distProxEstacao = atoi(buffer);
+
+    scanf("%s", buffer);
+    if(!strcmp(buffer, "NULO")) registro->codLinhaInteg = -1;
+    else registro->codLinhaInteg = atoi(buffer);
+
+    scanf("%s", buffer);
+    if(!strcmp(buffer, "NULO")) registro->codEstacaoInteg = -1;
+    else registro->codEstacaoInteg = atoi(buffer);
+
 }

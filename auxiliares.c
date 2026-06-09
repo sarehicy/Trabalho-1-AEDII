@@ -91,6 +91,7 @@ void movePonteiroRRN(FILE *arq, int rrn){
     // Verifica se o RRN buscado existe no arquivo
     if(rrn >= proxrrn){
         // desnecessario printf("Registro inexistente.");
+        printf("bolas");
         exit(0);
     }
 
