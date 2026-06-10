@@ -75,17 +75,17 @@ int lerRegistro(FILE *arq, reg *registro){
     /*   #   Verificando se Registro foi Removido   # */
 
     fread(&(registro->rem), sizeof(char), 1, arq);
+    fread(&(registro->prox), sizeof(int), 1, arq);
 
 
     if(registro->rem == '1' ){
-        fseek(arq, tamRegistro-1, SEEK_CUR); // Move ponteiro do arquivo para o próximo registro
+        fseek(arq, tamRegistro-5, SEEK_CUR); // Move ponteiro do arquivo para o próximo registro
         return 1;
     }
     
     /*   #   Leituras dos Campos do Registro    # */
 
     /* Campos de tamanho fixo */
-    fread(&(registro->prox), sizeof(int), 1, arq);
     fread(&(registro->codEstacao), sizeof(int), 1, arq);
     fread(&(registro->codLinha), sizeof(int), 1, arq); 
     fread(&(registro->codProxEstacao), sizeof(int), 1, arq);

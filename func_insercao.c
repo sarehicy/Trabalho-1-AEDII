@@ -17,7 +17,7 @@ void funcOito(dadosHeader *dados){
     scanf("%s", inBin);
     scanf("%s", inBinIndex);
 
-    int r = scanf("%d", &n);
+    scanf("%d", &n);
 
     FILE *arqBin = fopen(inBin, "rb+");
 
@@ -27,11 +27,11 @@ void funcOito(dadosHeader *dados){
 
     verificarArq(arqBinIndex);
 
-    montarDadosHeader(arqBin, registro, dados);
-
     lerCabecalho(arqBin, cabecalho);
 
     lerCabecalhoIndex(arqBin, cabecalhoIndex);
+
+    montarDadosHeader(arqBin, registro, dados);
 
     // Para cada inserção
     for(int i = 0; i<n; i++){
@@ -53,26 +53,29 @@ void funcOito(dadosHeader *dados){
             escreverRegIndex(arqBinIndex, registroIndex);
         }
         else{
-            int RRNaux;
-            movePonteiroRRN(arqBin, cabecalho->topo);
+            int RRNInserir = cabecalho->topo;
+            movePonteiroRRN(arqBin, RRNInserir);
             lerRegistro(arqBin, registro);
-            RRNaux = registro->prox;
+            int RRNTopoNovo = registro->prox;
+
+            inicializarRegistro(registro);
 
             montarRegistroCmd(registro);
-            registro->rem = '0';
 
             registroIndex->codEstacao = registro->codEstacao;
-            registroIndex->RRN = cabecalho->proxRRN;
+            registroIndex->RRN = RRNInserir;
 
-            movePonteiroRRN(arqBin, cabecalho->topo);
+            movePonteiroRRN(arqBin, RRNInserir);
             escreverRegistro(arqBin, registro);
-            cabecalho->topo = RRNaux;
+            cabecalho->topo = RRNTopoNovo;
             atualizarHeader(cabecalho, dados, registro, insert);
 
             fseek(arqBinIndex, 0, SEEK_END);
             escreverRegIndex(arqBinIndex, registroIndex);
         }
     }
+    escreverHeader(arqBin, cabecalho);
+
     // Depois de todas as inserções
     reordenarArqIndex(arqBinIndex);
 

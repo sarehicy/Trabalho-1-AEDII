@@ -62,6 +62,7 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
 
             // Incrementa a quantidade total de estações
             (tabela->qtdEstacoes)++;
+
             cabecalho->totalEstacoes = tabela->qtdEstacoes;
 
             // Realoca memória para vetor de estações e vetor de ocorrências
