@@ -168,33 +168,46 @@ void funcSeis(){
 
         montarBusca(linha, qtdCampos);
 
-        int buscaIndexSucesso = 0;
+        int RRN = -2;
         for(int j = 0; j<qtdCampos*2; j+=2){    // Se algum campo for codEstacao
-            if(linha[j] == "codEstacao"){       // Faz a busca indexada
+            if(!(strcmp(linha[j], "codEstacao"))){       // Faz a busca indexada
+                RRN = buscaIndexada(arqBinIndex, atoi(linha[j+1]));
+                
+                if(RRN != -1){
+                    movePonteiroRRN(arqBin, RRN);
+                    inicializarRegistro(registro);
 
-                int RRNbusca = buscaIndexada(arqBinIndex, atoi(linha[j+1]));
-                // Se nao encontrou sai do laço
-                if(RRNbusca == -1){
-                    printf("Registro Inexistente.\n");
-                    break;
+                    if (lerRegistro(arqBin, registro)){ //se não conseguir ler o registro
+                        printf("Registro inexistente.\n");
+                        break;
+                    }
+
+                    // Compara outros campos da busca
+                    if(buscaRegistro(registro, linha, qtdCampos))
+                        imprimirRegistro(registro);
+                        if(i != qtdBuscas-1) printf("\n");
+
+                    else 
+                        printf("Registro inexistente.\n");
+                } 
+                else{ // Se não encontrou
+                    printf("Registro inexistente.\n");
                 }
-                // Se encontrou imprime o registro
-                movePonteiroRRN(arqBin, RRNbusca);
-                lerRegistro(arqBin, registro);
-                imprimirRegistro(registro);
-                buscaIndexSucesso++;
+
+                break;
             }
         }
 
-        // Como o valor de codEstacao é unico, se encontrou, pode seguir para a proxima busca.
-        if(buscaIndexSucesso >=1){
+        // De alguma forma, a busca por codEstacao foi realizada, então não realiza a busca normal
+        if(RRN != -2){
+            desalocaVetorDePonteiros(linha, qtdCampos*2);
             continue;
         }
+    
 
         // Quantidade de vezes que a busca foi bem sucedida
         // É usado para controlar a mensagem de erro "Registro não encontrado"
         int buscaSucesso = 0;
-
         while(check_eof(arqBin)){
             inicializarRegistro(registro);
 
