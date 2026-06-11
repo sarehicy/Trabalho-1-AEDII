@@ -32,7 +32,7 @@ header *criarHeader(){
 
 void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int op){
 
-    int qtdEst = tabela->qtdEstacoes; 
+    int qtdEst = tabela->qtdEstacoes;
 
     switch(op){
         case insert:
@@ -128,7 +128,8 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
 
 void inserirPar(header *cabecalho, dadosHeader *dados, int codEst, int codProx){
     // Se algum valor for nulo, o par não é valido
-    if (codEst <= 0 || codProx <= 0) return;
+    if (codEst <= 0 || codProx <= 0) {
+        return;}
 
     //Realoca Pares para caber mais um par
     int (*temp)[2] = realloc(dados->pares, (dados->qtdPares + 1) * sizeof(int[2]));
@@ -143,7 +144,6 @@ void inserirPar(header *cabecalho, dadosHeader *dados, int codEst, int codProx){
     (dados->qtdPares)++;
 
     (cabecalho->totalPares) = dados->qtdPares;
-
 
 
 }
@@ -224,10 +224,14 @@ void montarDadosHeader(FILE *arqBin, reg *registro, dadosHeader *dados){
     fseek(arqBin, tamCabecalho, SEEK_SET);
 
     while(check_eof(arqBin)){
-        inicializarRegistro(registro);
-        if (lerRegistro(arqBin, registro)) continue;
         
+        inicializarRegistro(registro);
+
+        if (lerRegistro(arqBin, registro)) {
+            continue;}
         atualizarHeader(aux, dados, registro, add);
+
+
     }
 
     free(aux);

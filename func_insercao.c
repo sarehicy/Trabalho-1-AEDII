@@ -33,6 +33,8 @@ void funcOito(dadosHeader *dados){
 
     montarDadosHeader(arqBin, registro, dados);
 
+    dados->qtdPares = cabecalho->totalPares;
+
     // Para cada inserção
     for(int i = 0; i<n; i++){
         // Se não tiver registros lógicamente removidos
