@@ -155,6 +155,57 @@ int buscaCampo(reg *registro, char campo[], char valor[]){
     return 0;
 }
 
+void atualizarRegistro(reg *registro, char **linha, int qtdAtualizacoes){
+    verificarReg(registro);
+
+    for(int i = 0; i<(qtdAtualizacoes*2); i+=2){
+
+         // Codigo da Estacao
+        if(!strcmp(linha[i], "codEstacao")){
+            registro->codEstacao = atoi(linha[i+1]);
+        }
+
+        //Nome da Estacao
+        else if(!strcmp(linha[i], "nomeEstacao")){
+            strcpy(registro->nomeEstacao, linha[i+1]);
+            registro->tamNomeEstacao = strlen(linha[i+1]);
+        }
+
+        // Codigo da Linha
+        else if(!strcmp(linha[i], "codLinha")){
+            registro->codLinha = atoi(linha[i+1]);
+        }
+
+        // Nome da Linha
+        else if(!strcmp(linha[i], "nomeLinha")){
+            strcpy(registro->nomeLinha, linha[i+1]);
+            registro->tamNomeLinha = strlen(linha[i+1]);
+        }
+
+        // Codigo da próxima Estacao
+        else if(!strcmp(linha[i], "codProxEstacao")){
+            registro->codProxEstacao = atoi(linha[i+1]); 
+        }
+
+        // Distância da próxima Estacao
+        else if(!strcmp(linha[i], "distProxEstacao")){
+            registro->distProxEstacao = atoi(linha[i+1]);
+        }
+
+        // Código da linha Integrada
+        else if(!strcmp(linha[i], "codLinhaIntegra")){
+            registro->codLinhaInteg = atoi(linha[i+1]);
+
+        }
+
+        // Codigo da Estacao Integrada
+        else if (!strcmp(linha[i], "codEstIntegra")){
+            registro->codEstacaoInteg = atoi(linha[i+1]);
+        }
+
+    }
+}
+
 void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex){
     fread(&(registroIndex->codEstacao), sizeof(int), 1, arqBinIndex);
     fread(&(registroIndex->RRN), sizeof(int), 1, arqBinIndex);

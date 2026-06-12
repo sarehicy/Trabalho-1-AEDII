@@ -31,6 +31,10 @@ int buscaRegistro(reg *registro, char **linha, int qtdCampos);
     Retorna 1 se os campos forem iguais, 0 se forem diferentes.*/
 int buscaCampo(reg *registro, char campo[], char valor[]);
 
+/*Atualiza os campos de um registro.
+Os campos e os valores novos são passados pelo vetor linha.*/
+void atualizarRegistro(reg *registro, char **linha, int qtdAtualizacoes);
+
 void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex);
 
 void montarRegistroCmd(reg *registro);
