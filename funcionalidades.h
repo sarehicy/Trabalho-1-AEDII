@@ -37,8 +37,10 @@ void funcSeis();
 
 /*Remove todos os registros que correspondem a um determinado critério de busca*/
 void funcSete(dadosHeader *dados);
-//testandoooo
+
 
 void funcOito(dadosHeader *dados);  
+
+void funcNove(dadosHeader *dados);
 
 #endif

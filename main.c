@@ -41,6 +41,9 @@ int main(){
     case 8:
         funcOito(dados);
         break;
+    case 9:
+        funcNove(dados);
+        break;
     default:
         break;
     }
