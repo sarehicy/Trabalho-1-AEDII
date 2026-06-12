@@ -9,8 +9,9 @@ SRC = main.c \
       func_criar.c \
       func_insercao.c \
       func_remocao.c \
+      func_atualizar.c \
       ler_arq.c \
-      registros.c
+      registros.c 
 
 OBJ = $(SRC:.c=.o)
 

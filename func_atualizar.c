@@ -53,6 +53,7 @@ void funcNove(dadosHeader *dados){
 
 
         /*  #   Busca Indexada    #   */
+        int codEst; // Guarda o valor do codEstacao do registro antes da sua atualização
         int RRN = -2;
         for(int i = 0; i<(qtdCampos*2); i+=2){
             if (!(strcmp(linhaBusca[i], "codEstacao"))){     // Se algum campo for codEstacao faz a busca indexada
@@ -63,7 +64,8 @@ void funcNove(dadosHeader *dados){
                     movePonteiroRRN(arqBin, RRN);
                     inicializarRegistro(registro);
                     if (lerRegistro(arqBin, registro)) break;
-
+                    codEst = registro->codEstacao;
+                    
                     // Compara demais campos
                     if (buscaRegistro(registro, linhaBusca, qtdCampos)){  
 
@@ -72,6 +74,11 @@ void funcNove(dadosHeader *dados){
                         existe a possibilidade de que o o total número de estações ou o total número de pares seja afetado.*/
                         atualizarHeader(cabecalho, dados, registro, rmv);
                         atualizarRegistro(registro, linhaAtualizacoes, qtdAtualizacoes);
+
+                        // Atualizando arquivo índices 
+                        if (codEst != (registro->codEstacao)) // se o codEstacao foi alterado, é preciso modificar o arquivo índice
+                            atualizaCodEstacaoIndex(arqBinIndex, codEst, registro->codEstacao);
+
 
                         // Escreve registro atualizado
                         movePonteiroRRN(arqBin, RRN);
@@ -97,10 +104,15 @@ void funcNove(dadosHeader *dados){
             inicializarRegistro(registro);
             if(lerRegistro(arqBin, registro)) continue;
 
+            codEst = registro->codEstacao;
             // Compara campos
             if(buscaRegistro(registro, linhaBusca, qtdCampos)){
                 atualizarHeader(cabecalho, dados, registro, rmv); 
                 atualizarRegistro(registro, linhaAtualizacoes, qtdAtualizacoes);
+
+                //Atualizando arquivo índice
+                if (codEst != (registro->codEstacao)) // se o codEstacao foi alterado, é preciso modificar o arquivo índice
+                        atualizaCodEstacaoIndex(arqBinIndex, codEst, registro->codEstacao);
 
                 // Escreve registro atualizado
                 movePonteiroRRN(arqBin, RRN);
