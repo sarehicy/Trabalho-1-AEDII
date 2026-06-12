@@ -9,7 +9,7 @@ void funcSete(dadosHeader *dados){
     verificarHeader(cabecalho);
 
     headerIndex *cabecalhoIndex = malloc(sizeof(headerIndex));
-    if (!cabecalhoIndex) exit(0);
+    verificarHeaderIndex(cabecalhoIndex);
 
 
 
@@ -19,7 +19,7 @@ void funcSete(dadosHeader *dados){
     
 
 
-    /*      # Abrindo Arquivos #      */
+    // # Abertura e verificação de arquivos # // 
     FILE *arqBin = fopen(inBin, "rb+");
     verificarArq(arqBin);
     FILE *arqBinIndex = fopen(inBinIndex, "rb");

@@ -169,8 +169,8 @@ void funcSeis(){
         montarBusca(linha, qtdCampos);
 
         int RRN = -2;
-        for(int j = 0; j<qtdCampos*2; j+=2){    // Se algum campo for codEstacao
-            if(!(strcmp(linha[j], "codEstacao"))){       // Faz a busca indexada
+        for(int j = 0; j<qtdCampos*2; j+=2){            
+            if(!(strcmp(linha[j], "codEstacao"))){       // Se algum campo for codEstacao faz a busca indexada
                 RRN = buscaIndexada(arqBinIndex, atoi(linha[j+1]));
                 
                 if(RRN != -1){
