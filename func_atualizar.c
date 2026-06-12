@@ -70,7 +70,7 @@ void funcNove(dadosHeader *dados){
                         /* Chama função atualizarHeader() como se uma remoção houvesse acontecido,
                         pois se os campos "nomeEstacao", "codEstacao" ou "codProxEstacao" forem alterados, 
                         existe a possibilidade de que o o total número de estações ou o total número de pares seja afetado.*/
-                        atualizarHeader(cabecalho, dados, registro, rmv); 
+                        atualizarHeader(cabecalho, dados, registro, rmv);
                         atualizarRegistro(registro, linhaAtualizacoes, qtdAtualizacoes);
 
                         // Escreve registro atualizado
@@ -78,17 +78,53 @@ void funcNove(dadosHeader *dados){
                         escreverRegistro(arqBin, registro);
                         atualizarHeader(cabecalho, dados, registro, insert);
                     } else break;
-
                 }
-
-
             }
-
-
         }
 
+        // De alguma forma, a busca por codEstacao foi realizada, então não realiza a busca normal
+        if(RRN != -2){
+            desalocaVetorDePonteiros(linhaBusca, qtdCampos*2);
+            desalocaVetorDePonteiros(linhaAtualizacoes, qtdAtualizacoes*2);
+            continue;
+        }
+
+        /*       # Busca Normal #       */
+        RRN = -1; fseek(arqBin, tamCabecalho, SEEK_SET); 
+        while(check_eof(arqBin)){
+            RRN++; 
+
+            inicializarRegistro(registro);
+            if(lerRegistro(arqBin, registro)) continue;
+
+            // Compara campos
+            if(buscaRegistro(registro, linhaBusca, qtdCampos)){
+                atualizarHeader(cabecalho, dados, registro, rmv); 
+                atualizarRegistro(registro, linhaAtualizacoes, qtdAtualizacoes);
+
+                // Escreve registro atualizado
+                movePonteiroRRN(arqBin, RRN);
+                escreverRegistro(arqBin, registro);
+                atualizarHeader(cabecalho, dados, registro, insert);
+            }
+        }
+
+        desalocaVetorDePonteiros(linhaBusca, qtdCampos*2);
+        desalocaVetorDePonteiros(linhaAtualizacoes, qtdAtualizacoes*2);
 
     }
 
+    cabecalho->status = consistente;
+    escreverHeader(arqBin, cabecalho);
+    cabecalhoIndex->status = consistente;
+    escreverHeaderIndex(arqBinIndex, cabecalhoIndex);
+
+    fclose(arqBin);
+    fclose(arqBinIndex);
+    free(registro);
+    free(cabecalho);
+    
+    BinarioNaTela(inBin);
+    BinarioNaTela(inBinIndex);
 
 }
