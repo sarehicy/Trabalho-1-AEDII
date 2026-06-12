@@ -49,6 +49,9 @@ void printArray(int arr[], int n);
 Retorna -1 se não conseguir encontrar o registro.*/
 int buscaIndexada(FILE *arq, int codEstacao);
 
+/*Atualiza valor codEstacao de um registro do arquivo índice e reordena o arquivo*/
+void atualizaCodEstacaoIndex(FILE *arq, int codEstAntigo, int codEstNovo);
+
 /*Remove registro com um determinado RRN do arquivo Index e retorna arquivo sem esse registro*/
 FILE *removeRegistroIndex(char *nomeArq, int RRN);
 

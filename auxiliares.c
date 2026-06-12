@@ -245,6 +245,16 @@ int buscaIndexada(FILE *arq, int codEstacao){
     return -1;
 }
 
+void atualizaCodEstacaoIndex(FILE *arq, int codEstAntigo, int codEstNovo){
+    buscaIndexada(arq, codEstAntigo); // Move ponteiro para depois do registro com codEstacao especificado
+    fseek(arq, -8, SEEK_CUR);         // Move ponteiro para o começo do registro desejado
+
+    // Escreve novo codEstacao
+    fwrite(&(codEstNovo), sizeof(int), 1, arq);
+    
+    reordenarArqIndex(arq);
+}
+
 FILE *removeRegistroIndex(char *nomeArq, int RRN){
     FILE *arqOrigem = fopen(nomeArq, "rb"); verificarArq(arqOrigem);
     FILE *arqDestino = fopen("temp.bin", "wb"); verificarArq(arqDestino);
@@ -299,15 +309,16 @@ void reordenarArqIndex(FILE *arqIndex){
 
     fseek(arqIndex, 0, SEEK_SET);
 
-    cabecalhoIndex->status = '0';
+    cabecalhoIndex->status = inconsistente;
     fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqIndex);
 
+    // AQUI PODERIA USAR A FUNÇÃO ESCREVER REGISTRO INDEX !!!!!!!!!!!!!!!!!!!!
     for(int j=0; j<i; j++){
         fwrite(&(vetRegistroIndex[j].codEstacao), sizeof(int), 1, arqIndex);
         fwrite(&(vetRegistroIndex[j].RRN), sizeof(int), 1, arqIndex);
     }
 
-    cabecalhoIndex->status = '1';
+    cabecalhoIndex->status = consistente;
     fseek(arqIndex, 0, SEEK_SET);
     fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqIndex);
 }
