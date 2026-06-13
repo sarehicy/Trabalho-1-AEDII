@@ -35,8 +35,7 @@ int buscaCampo(reg *registro, char campo[], char valor[]);
 Os campos e os valores novos são passados pelo vetor linha.*/
 void atualizarRegistro(reg *registro, char **linha, int qtdAtualizacoes);
 
-void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex);
-
+/*Monta registro com uma linha do terminal*/
 void montarRegistroCmd(reg *registro);
 
 #endif

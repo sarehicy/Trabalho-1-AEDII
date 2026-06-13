@@ -15,20 +15,22 @@ void funcSete(dadosHeader *dados){
 
     /*      # User Input #      */
     char inBin[100], inBinIndex[100]; int n;
-    scanf("%s %s %d", inBin, inBinIndex, &n);
-    
+    scanf("%s", inBin);
+    scanf("%s",inBinIndex);
+    scanf("%d", &n);    
 
 
     // # Abertura e verificação de arquivos # // 
     FILE *arqBin = fopen(inBin, "rb+");
     verificarArq(arqBin);
-    FILE *arqBinIndex = fopen(inBinIndex, "rb");
+    FILE *arqBinIndex = fopen(inBinIndex, "rb+");
     verificarArq(arqBinIndex);
-
-    montarDadosHeader(arqBin, registro, dados);
 
     lerCabecalhoIndex(arqBinIndex, cabecalhoIndex);
     lerCabecalho(arqBin, cabecalho);
+
+    montarDadosHeader(arqBin, registro, dados);
+    dados->qtdPares = cabecalho->totalPares;
 
     /*      # Buscas #       */
 
@@ -45,25 +47,27 @@ void funcSete(dadosHeader *dados){
         montarBusca(linha, qtdCampos);
 
         int RRN = -2;    //Guarda RRN do registro cujos campos estão sendo comparados
+    
         /*      # Busca por codEstacao #        */
-
         for (int i = 0; i < (qtdCampos*2); i+=2){
             if (!(strcmp(linha[i], "codEstacao"))){
                 RRN = buscaIndexada(arqBinIndex, atoi(linha[i+1]));
 
-                // registro com codEstacao encontrado, compara demais campos da busca
+                // registro com codEstacao encontrado
                 if (RRN != -1){
+                    // Lê registro
                     movePonteiroRRN(arqBin, RRN);
                     inicializarRegistro(registro);
                     if (lerRegistro(arqBin, registro)) break;
 
+                    /// Compara demais campos
                     if(buscaRegistro(registro, linha, qtdCampos)){
                         registro->rem = '1';
 
                         registro->prox = cabecalho->topo;
                         cabecalho->topo = RRN;
 
-                        // Move ponteiro para inicio do registro de rrn removido p reescrever registro com campos modificados
+                        // Move ponteiro para inicio do registro removido p reescrever registro marcado como logicamente removido
                         movePonteiroRRN(arqBin, RRN);
                         escreverRegistro(arqBin, registro);
                         atualizarHeader(cabecalho, dados, registro, rmv);
@@ -86,24 +90,18 @@ void funcSete(dadosHeader *dados){
         RRN = -1; fseek(arqBin, tamCabecalho, SEEK_SET); 
         while(check_eof(arqBin)){
             RRN++;
-            //debug printf("Registro de rrn %d\n", RRN);
 
+            // Lê registro
             inicializarRegistro(registro);
-
             if(lerRegistro(arqBin, registro))
                 continue;
             
             //Se registro corresponder a busca, removê-lo
             if(buscaRegistro(registro, linha, qtdCampos)){
-                //debug printf("Registro encontrado\n");
-                //debug imprimirRegistro(registro);
-
                 registro->rem = '1';
-                //debug printf("Registro rem: %c\n", registro->rem);
                 
                 registro->prox = cabecalho->topo;
                 cabecalho->topo = RRN;
-
 
                 // Move ponteiro para inicio do registro de rrn removido p escrever
                 movePonteiroRRN(arqBin, RRN);
@@ -126,10 +124,8 @@ void funcSete(dadosHeader *dados){
     fclose(arqBinIndex);
     free(registro);
     free(cabecalho);
+    free(cabecalhoIndex);
     
     BinarioNaTela(inBin);
     BinarioNaTela(inBinIndex);
-    // Realiza busca e remove arquivo
-    // É necessário atualizar cabeçalho do arqBin
-    // É necessário atualizar arquivo inBinIndex
 }

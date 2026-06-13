@@ -23,7 +23,7 @@ void funcUm(dadosHeader *dados){
     /*   #   Registro no arqCsv -> Registro no arqBin   # */
 
     // Muda status do arquivo para inconsistente enquanto são realizadas escritas
-    cabecalho->status = '0';
+    cabecalho->status = inconsistente;
 
     // Escreve um cabeçalho inicial no arquivo bin
     escreverHeader(arqBin, cabecalho);
@@ -35,7 +35,7 @@ void funcUm(dadosHeader *dados){
         escreverRegistro(arqBin, registro);             // Escreve registro no binário
     }
 
-    cabecalho->status = '1';
+    cabecalho->status = consistente;
 
     // Escreve o cabeçalho final no arquivo bin
     escreverHeader(arqBin, cabecalho);
@@ -51,20 +51,22 @@ void funcUm(dadosHeader *dados){
 }
 
 void funcCinco(){
+    /*      # structs #     */
     reg *registro = malloc(sizeof(reg)*1);
     verificarReg(registro);
     header *cabecalho = malloc(sizeof(header)*1);
     verificarHeader(cabecalho);
 
     headerIndex *cabecalhoIndex = malloc(sizeof(headerIndex)*1);
+    verificarHeaderIndex(cabecalhoIndex);
 
-    // Entrada com nome dos arquivos
+    /*      # User Input #      */
     char inBin[100], inBinIndex[100];
 
     scanf("%s", &inBin);
     scanf("%s", inBinIndex);
 
-    // Abertura de arquivos
+    /* # Abertura e verificação de arquivos # */ 
     FILE *arqBin = fopen(inBin, "rb");
     FILE *arqBinIndex = fopen(inBinIndex, "wb");
     verificarArq(arqBin);
@@ -72,7 +74,7 @@ void funcCinco(){
 
     lerCabecalho(arqBin, cabecalho);
 
-    // vetores para par(codEstacao, RRN)
+    // vetor de registros do arquivo índice
     int capacidade = 10;
     regIndex *vetRegistroIndex = malloc(sizeof(regIndex)*capacidade);
 
@@ -88,18 +90,21 @@ void funcCinco(){
             vetRegistroIndex = realloc(vetRegistroIndex, sizeof(regIndex)*capacidade);
         }
 
-        // Le registro e guarda Estacao e RRN nos vetores
-        if(lerRegistro(arqBin, registro) == 1) {
+        // Lê registro e guarda Estação e RRN no vetor
+        if(lerRegistro(arqBin, registro)) {
             continue;
         }
+
         vetRegistroIndex[i].codEstacao = registro->codEstacao;
         vetRegistroIndex[i].RRN = rrnAtual;
 
         i++;
     }
+
     ordenarIndiceHeap(vetRegistroIndex, i);
 
-    cabecalhoIndex->status = '0';
+    // Escreve registros no arquivo índice
+    cabecalhoIndex->status = inconsistente;
     fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqBinIndex);
 
     for(int j=0; j<i; j++){
@@ -107,10 +112,17 @@ void funcCinco(){
         fwrite(&(vetRegistroIndex[j].RRN), sizeof(int), 1, arqBinIndex);
     }
 
-    cabecalhoIndex->status = '1';
+    cabecalhoIndex->status = consistente;
     fseek(arqBinIndex, 0, SEEK_SET);
     fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqBinIndex);
 
+
+    /*   #   Fechando Arquivos e BinarioNaTela()    # */
+
+    free(registro);
+    free(cabecalho);
+    free(vetRegistroIndex);
+    free(cabecalhoIndex);
     fclose(arqBin);
     fclose(arqBinIndex);
 

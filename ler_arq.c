@@ -170,3 +170,8 @@ void lerCabecalhoIndex(FILE *arq, headerIndex *cabecalho){
         exit(0);
     }
 }
+
+void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex){
+    fread(&(registroIndex->codEstacao), sizeof(int), 1, arqBinIndex);
+    fread(&(registroIndex->RRN), sizeof(int), 1, arqBinIndex);
+}

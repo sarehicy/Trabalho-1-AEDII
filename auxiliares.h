@@ -38,12 +38,16 @@ void BinarioNaTela(char *arquivo);
 
 char check_eof(FILE* f);
 
-// Faz uma busca em um arquivo indice, retorna o RRN do codEstacao
-
+/*Recebe vetor de registros do arquivo índice e seu tamanho.
+Ordena vetor por codEstacao*/
 void ordenarIndiceHeap(regIndex *vetRegistroIndex, int n);
+
+/*Função auxiliar da função ordenarIndiceHeap()*/
 void heapifyIndice(regIndex *vetRegistroIndex, int n, int i);
+
+/*Dados dois registros índice, troca-os de lugar*/
 void troca(regIndex *a, regIndex *b);
-void printArray(int arr[], int n);
+
 
 /* Realiza busca binária no arquivo e retorna RRN do registro com determinado código estação.
 Retorna -1 se não conseguir encontrar o registro.*/

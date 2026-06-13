@@ -29,6 +29,8 @@ void funcTres();
 // Pesquisa e retorna, se encontrar, registro com o RRN específicado
 void funcQuatro();
 
+// --- Funcionalidade 5 do programa ---
+// Dado um arquivo binário cria um arquivo índice
 void funcCinco();
 
 // --- Funcionalidade 6 do programa ---

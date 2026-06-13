@@ -28,5 +28,7 @@ void lerCabecalho(FILE *arq, header *cabecalho);
 /* Lê cabeçalho do arquivo binario índice e verifica consistência do arquivo*/
 void lerCabecalhoIndex(FILE *arq, headerIndex *cabecalho);
 
+/*lê registro do arquivo índice*/
+void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex);
 
 #endif

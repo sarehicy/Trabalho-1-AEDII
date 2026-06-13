@@ -25,6 +25,7 @@
 // Verifica integridade do ponteiro do cabeçalho
 void verificarHeader(header *cabecalho);
 
+// Verifica integridade do ponteiro do cabeçalho do arquivo índice
 void verificarHeaderIndex(headerIndex *cabecalho);
 
 /* Cria uma struct header.

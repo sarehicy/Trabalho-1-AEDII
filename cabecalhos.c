@@ -37,8 +37,8 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
     switch(op){
         case insert:
         case add: // Inserção de registro
-            // Incrementa o proxRRN livre
-
+            
+            // Se inseriu no fim do arquivo
             if (op == add) (cabecalho->proxRRN)++;
 
             inserirPar(cabecalho, tabela, (registro->codEstacao), (registro->codProxEstacao));
@@ -47,14 +47,11 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
             //Se a estação já foi contabilizada, incrementa ocorrência e retorna da função
             for (int i = 0; i < qtdEst; i++){
                 if (!strcmp(tabela->estacoes[i], registro->nomeEstacao)){
-                    tabela->estacoesOcorrencias[i] = tabela->estacoesOcorrencias[i]+ 1;
-                    //debug printf("nova ocorrencia de %s: %d\n", tabela->estacoes[i], tabela->estacoesOcorrencias[i]);
+                    tabela->estacoesOcorrencias[i] = (tabela->estacoesOcorrencias[i])+ 1;
                     return;
-
                 }
             }
             
-            //debug printf("nova estacao: %s\n", registro->nomeEstacao);
             // Insere nova estação na tabela de estações 
             tabela->estacoes[qtdEst] = malloc(sizeof(char)*((registro->tamNomeEstacao) + 1));
             strcpy(tabela->estacoes[qtdEst], registro->nomeEstacao);
@@ -62,20 +59,17 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
 
             // Incrementa a quantidade total de estações
             (tabela->qtdEstacoes)++;
-
             cabecalho->totalEstacoes = tabela->qtdEstacoes;
 
             // Realoca memória para vetor de estações e vetor de ocorrências
-            char **aux = realloc(tabela->estacoes, sizeof(char *) * (tabela->qtdEstacoes +1));
+            char **aux = realloc(tabela->estacoes, sizeof(char *) * ((tabela->qtdEstacoes) +1));
             if (!aux) exit(0);
             tabela->estacoes = aux;
 
-            int *aux2 = realloc(tabela->estacoesOcorrencias, sizeof(int)* (tabela->qtdEstacoes +1) );
-            if (!aux) exit(0);
+            int *aux2 = realloc(tabela->estacoesOcorrencias, sizeof(int)* ((tabela->qtdEstacoes) +1) );
+            if (!aux2) exit(0);
             tabela->estacoesOcorrencias = aux2;
-            //debug printf("estacao: %s qtd ocorrencias: %d\n", tabela->estacoes[qtdEst], tabela->estacoesOcorrencias[qtdEst]);
             break;
-
 
 
         // Remoção de registro
@@ -86,17 +80,18 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
             int i;
             for (i = 0; i<qtdEst; i++){
 
+                // Busca estação do registro no vetor e decrementa a qtd de ocorrências
                  if (!strcmp(tabela->estacoes[i], registro->nomeEstacao)){
                     tabela->estacoesOcorrencias[i] = tabela->estacoesOcorrencias[i] - 1;
-                    //debug printf("menos uma ocorrencia: %d\n", tabela->estacoesOcorrencias[i]);
                     break;
                  }
             }
 
-            
+            // Se não existem mais ocorrências, a estação pode ser removida do vetor e a quantidade total de estações diminui
             if (tabela->estacoesOcorrencias[i] == 0){
                 free(tabela->estacoes[i]);
 
+                // Remove estação do vetor
                 for (int j = i; j < (qtdEst-1); j++){
                     tabela->estacoes[j] = tabela->estacoes[j+1];
                     tabela->estacoesOcorrencias[j] = tabela->estacoesOcorrencias[j+1];
@@ -104,20 +99,18 @@ void atualizarHeader(header *cabecalho, dadosHeader *tabela, reg *registro, int 
 
                 (tabela->qtdEstacoes)--;
                 cabecalho->totalEstacoes = tabela->qtdEstacoes;
-               //debug printf("total estacoes caiu! \n", cabecalho->totalEstacoes);
 
+                // Realoca memória para vetor de estações e vetor de ocorrências
                 char **aux = realloc(tabela->estacoes, sizeof(char *) * (tabela->qtdEstacoes +1));
                 if(!aux) exit(0);
                 tabela->estacoes = aux;
 
                 int *aux2 = realloc(tabela->estacoesOcorrencias, sizeof(int)* (tabela->qtdEstacoes +1) );
-                if (!aux) exit(0);
+                if (!aux2) exit(0);
                 tabela->estacoesOcorrencias = aux2;
-
             }
 
             break;
-
     }
 
 
@@ -152,23 +145,17 @@ void inserirPar(header *cabecalho, dadosHeader *dados, int codEst, int codProx){
 
 void removerPar(header *cabecalho, dadosHeader *dados, int codEst, int codProx){
     // Se algum valor for nulo, o par não é valido
-
-        if (codEst <= 0 || codProx <= 0) return;
+    if (codEst <= 0 || codProx <= 0) return;
 
     // Descobre em que posição está o par
     int i;
     for(i = 0; i < dados->qtdPares; i++){
         // Encontrou o par
-
-        if((dados->pares[i][0] == codEst) &&
-
-        (dados->pares[i][1] == codProx)){
-
+        if((dados->pares[i][0] == codEst) && (dados->pares[i][1] == codProx)){
                 break;
-
         } 
-
     }  
+
     // Sobrescrevendo par
     for (int j = i; j < ((dados->qtdPares)-1); j++ ){
         dados->pares[j][0] = dados->pares[j+1][0];
@@ -176,16 +163,12 @@ void removerPar(header *cabecalho, dadosHeader *dados, int codEst, int codProx){
     }
 
     (dados->qtdPares)--;
-
     (cabecalho->totalPares) = dados->qtdPares;
 
     //Diminui tamanho do vetor pares
     int (*temp)[2] = realloc(dados->pares, (dados->qtdPares + 1) * sizeof(int[2]));
-
     if (!temp) exit(0);
-
     dados->pares = temp;
-
 }
 
 

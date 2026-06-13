@@ -206,11 +206,6 @@ void atualizarRegistro(reg *registro, char **linha, int qtdAtualizacoes){
     }
 }
 
-void lerRegistroIndex(FILE *arqBinIndex, regIndex *registroIndex){
-    fread(&(registroIndex->codEstacao), sizeof(int), 1, arqBinIndex);
-    fread(&(registroIndex->RRN), sizeof(int), 1, arqBinIndex);
-}
-
 
 void montarRegistroCmd(reg *registro){  
 

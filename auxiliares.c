@@ -195,18 +195,18 @@ void troca(regIndex *a, regIndex *b){
     *b = temp;
 }
 
-void printArray(int *arr, int n) {
-    for (int i = 0; i < n; ++i)
-        printf("%d ", arr[i]);
-    printf("\n");
-}
 
 int buscaIndexada(FILE *arq, int codEstacao){
     verificarArq(arq);
+    //malloca um registro=
+    regIndex *registro = malloc(sizeof(regIndex)); verificarRegIndex(registro);
 
     // Verifica quantidade de registros
     fseek(arq, 0, SEEK_END);
     int tamanhoArq = ftell(arq);
+
+    // Se o arquivo não conter registros, não realiza busca
+    if (tamanhoArq <=1) return -1;
 
     // final do arquivo - 1(tamanho do cabeçalho) / 8(tamanho do registro)
     int qtdRegistros = (tamanhoArq - 1)/8;
@@ -214,6 +214,7 @@ int buscaIndexada(FILE *arq, int codEstacao){
     int esq = 0;
     int dir = qtdRegistros - 1;
 
+    // Faz busca binária
     while(esq <= dir){
 
         // RRN do meio
@@ -222,14 +223,13 @@ int buscaIndexada(FILE *arq, int codEstacao){
         // Calculo da posição do RRN
         fseek(arq, 1+(meio*8), SEEK_SET);
 
-        //malloca um registro e lê
-        regIndex *registro = malloc(sizeof(regIndex)); if (!registro) exit(0);
+        //Lê registro
         lerRegistroIndex(arq, registro);
 
         // se encontrou, retorna o RRN
         if(registro->codEstacao == codEstacao){
             int rrn = registro->RRN;
-            free(registro); // se lerRegistroIndex usa malloc
+            free(registro);
             return rrn;
         }
         //senao continua buscando
@@ -239,8 +239,9 @@ int buscaIndexada(FILE *arq, int codEstacao){
         else{
             esq = meio + 1;
         }
-        free(registro);
     }
+
+    free(registro);
     //se nao achou retorna -1
     return -1;
 }
@@ -260,7 +261,7 @@ FILE *removeRegistroIndex(char *nomeArq, int RRN){
     FILE *arqDestino = fopen("temp.bin", "wb"); verificarArq(arqDestino);
 
     regIndex *registro = malloc(sizeof(regIndex));
-    if (!registro) exit(0);
+    verificarRegIndex(registro);
 
     /* # Leitura do status do arquivo índice #*/
     char status;
@@ -278,13 +279,14 @@ FILE *removeRegistroIndex(char *nomeArq, int RRN){
 
     fclose(arqOrigem);
     fclose(arqDestino);
+    free(registro);
 
     remove(nomeArq); //deleta arquivo não modificado
     rename("temp.bin", nomeArq);
-    arqDestino = fopen(nomeArq, "rb");  verificarArq(arqDestino);
+    arqDestino = fopen(nomeArq, "rb+");  verificarArq(arqDestino);
+    
     return arqDestino;
 }
-
 
 void reordenarArqIndex(FILE *arqIndex){
     int capacidade = 10, i=0;
@@ -292,6 +294,7 @@ void reordenarArqIndex(FILE *arqIndex){
     regIndex *vetRegistroIndex = malloc(sizeof(regIndex)*capacidade);
     fseek(arqIndex, 1, SEEK_SET);
     
+    // Lê registros do arquivo e guarda em um vetor
     while(check_eof(arqIndex)){
         // Se a capacidade for atingida, aloca mais memória
         if(i >= capacidade-1){
@@ -305,14 +308,14 @@ void reordenarArqIndex(FILE *arqIndex){
         i++;
     }
 
+    // Ordena vetor com registros
     ordenarIndiceHeap(vetRegistroIndex, i);
 
+    // Escreve registros ordenados no arquivo
     fseek(arqIndex, 0, SEEK_SET);
-
     cabecalhoIndex->status = inconsistente;
     fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqIndex);
 
-    // AQUI PODERIA USAR A FUNÇÃO ESCREVER REGISTRO INDEX !!!!!!!!!!!!!!!!!!!!
     for(int j=0; j<i; j++){
         fwrite(&(vetRegistroIndex[j].codEstacao), sizeof(int), 1, arqIndex);
         fwrite(&(vetRegistroIndex[j].RRN), sizeof(int), 1, arqIndex);

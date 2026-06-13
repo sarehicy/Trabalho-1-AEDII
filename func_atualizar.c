@@ -29,13 +29,13 @@ void funcNove(dadosHeader *dados){
     FILE *arqBinIndex = fopen(inBinIndex, "rb+");
     verificarArq(arqBinIndex);
 
-    montarDadosHeader(arqBin, registro, dados);
-
     lerCabecalhoIndex(arqBinIndex, cabecalhoIndex);
     lerCabecalho(arqBin, cabecalho);
 
-    /*      # Buscas #       */
+    montarDadosHeader(arqBin, registro, dados);
+    dados->qtdPares = cabecalho->totalPares;
 
+    /*      # Buscas #       */
     cabecalho->status = inconsistente; // porque vai escrever no arq
     escreverHeader(arqBin, cabecalho);
     cabecalhoIndex->status = inconsistente;
@@ -44,11 +44,11 @@ void funcNove(dadosHeader *dados){
     int qtdCampos, qtdAtualizacoes;
     while(n--){
         scanf("%d", &qtdCampos);
-        char *linhaBusca[qtdCampos*2];           // Vetor com os *pares "campo" e "valor" 
+        char *linhaBusca[qtdCampos*2];           // Vetor com os *pares "campo" e "valor"  sendo buscados
         montarBusca(linhaBusca, qtdCampos);
 
         scanf("%d", &qtdAtualizacoes);
-        char *linhaAtualizacoes[qtdAtualizacoes*2];
+        char *linhaAtualizacoes[qtdAtualizacoes*2];     // Vetor com os *pares "campo" e "valor" que serão atualizados
         montarBusca(linhaAtualizacoes, qtdAtualizacoes);
 
 
@@ -78,7 +78,6 @@ void funcNove(dadosHeader *dados){
                         // Atualizando arquivo índices 
                         if (codEst != (registro->codEstacao)) // se o codEstacao foi alterado, é preciso modificar o arquivo índice
                             atualizaCodEstacaoIndex(arqBinIndex, codEst, registro->codEstacao);
-
 
                         // Escreve registro atualizado
                         movePonteiroRRN(arqBin, RRN);
