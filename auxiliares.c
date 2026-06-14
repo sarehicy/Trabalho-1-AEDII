@@ -90,8 +90,7 @@ void movePonteiroRRN(FILE *arq, int rrn){
 
     // Verifica se o RRN buscado existe no arquivo
     if(rrn >= proxrrn){
-        // desnecessario printf("Registro inexistente.");
-        printf("bolas");
+        printf("Registro inexistente.");
         exit(0);
     }
 
@@ -286,42 +285,4 @@ FILE *removeRegistroIndex(char *nomeArq, int RRN){
     arqDestino = fopen(nomeArq, "rb+");  verificarArq(arqDestino);
     
     return arqDestino;
-}
-
-void reordenarArqIndex(FILE *arqIndex){
-    int capacidade = 10, i=0;
-    headerIndex *cabecalhoIndex = malloc(sizeof(headerIndex));
-    regIndex *vetRegistroIndex = malloc(sizeof(regIndex)*capacidade);
-    fseek(arqIndex, 1, SEEK_SET);
-    
-    // Lê registros do arquivo e guarda em um vetor
-    while(check_eof(arqIndex)){
-        // Se a capacidade for atingida, aloca mais memória
-        if(i >= capacidade-1){
-            capacidade *= 2;
-            vetRegistroIndex = realloc(vetRegistroIndex, sizeof(regIndex)*capacidade);
-        }
-
-        fread(&(vetRegistroIndex[i].codEstacao), sizeof(int), 1, arqIndex);
-        fread(&(vetRegistroIndex[i].RRN), sizeof(int), 1, arqIndex);
-
-        i++;
-    }
-
-    // Ordena vetor com registros
-    ordenarIndiceHeap(vetRegistroIndex, i);
-
-    // Escreve registros ordenados no arquivo
-    fseek(arqIndex, 0, SEEK_SET);
-    cabecalhoIndex->status = inconsistente;
-    fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqIndex);
-
-    for(int j=0; j<i; j++){
-        fwrite(&(vetRegistroIndex[j].codEstacao), sizeof(int), 1, arqIndex);
-        fwrite(&(vetRegistroIndex[j].RRN), sizeof(int), 1, arqIndex);
-    }
-
-    cabecalhoIndex->status = consistente;
-    fseek(arqIndex, 0, SEEK_SET);
-    fwrite(&(cabecalhoIndex->status), sizeof(char), 1, arqIndex);
 }

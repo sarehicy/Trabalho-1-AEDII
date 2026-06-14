@@ -4,10 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "auxiliares.h"
 #include "cabecalhos.h"
+#include "arquivos.h"
 #include "funcionalidades.h"
+#include "registros.h"
 #include "structs.h"
-
 int main(){    
     dadosHeader *dados = criarDadosHeader();
 

@@ -3,8 +3,7 @@
 
 #include "auxiliares.h"
 #include "cabecalhos.h"
-#include "escrever_arq.h"
-#include "ler_arq.h"
+#include "arquivos.h"
 #include "funcionalidades.h"
 #include "registros.h"
 #include "structs.h"

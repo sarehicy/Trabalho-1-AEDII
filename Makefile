@@ -4,13 +4,12 @@ CFLAGS =
 SRC = main.c \
       auxiliares.c \
       cabecalhos.c \
-      escrever_arq.c \
+      arquivos.c \
       func_buscar.c \
       func_criar.c \
       func_insercao.c \
       func_remocao.c \
       func_atualizar.c \
-      ler_arq.c \
       registros.c 
 
 OBJ = $(SRC:.c=.o)
