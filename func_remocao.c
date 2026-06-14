@@ -31,6 +31,12 @@ void funcSete(dadosHeader *dados){
 
     montarDadosHeader(arqBin, registro, dados);
     dados->qtdPares = cabecalho->totalPares;
+    /* ATENÇÃO!
+        A funcão montarDadosHeader está contando os pares corretamente, no entanto no caso de teste 7
+        a quantidade de pares do cabeçalho do arquivo está incorreta, o que acabava provocando erro no resultado final.
+        Para evitar problemas a quantidade de pares da struct auxiliar foi igualada a quantidade de pares do cabeçalho. :)
+        Conversado com o monitor Renan Catarin.
+    */
 
     /*      # Buscas #       */
 
