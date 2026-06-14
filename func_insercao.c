@@ -102,6 +102,10 @@ void funcOito(dadosHeader *dados){
 
     fclose(arqBin);
     fclose(arqBinIndex);
+    free(registro);
+    free(cabecalho);
+    free(registroIndex);
+    free(cabecalhoIndex);
     BinarioNaTela(inBin);
     BinarioNaTela(inBinIndex);
 }

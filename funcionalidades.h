@@ -36,12 +36,16 @@ void funcCinco();
 // Busca por campo, onde se um dos campos buscados for "codEstacao" faz uma busca indexada
 void funcSeis();
 
-/*Remove todos os registros que correspondem a um determinado critério de busca*/
+// --- Funcionalidade 7 do programa ---
+//Remove todos os registros que correspondem a um determinado critério de busca
 void funcSete(dadosHeader *dados);
 
-
+// --- Funcionalidade 8 do programa ---
+// Insere um novo registro no arquivo aproveitando espaço de registros removidos
 void funcOito(dadosHeader *dados);  
 
+// --- Funcionalidade 9 do programa ---
+// --- Atualiza os campos dos registros que corresponderem a um determinado critério de busca
 void funcNove(dadosHeader *dados);
 
 #endif

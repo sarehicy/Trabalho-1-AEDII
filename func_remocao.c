@@ -82,7 +82,6 @@ void funcSete(dadosHeader *dados){
                     } else break;
 
                 } else break;
-
             }
         }
 
