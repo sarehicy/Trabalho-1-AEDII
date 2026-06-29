@@ -83,7 +83,7 @@ Sistema de manipulação de arquivos desenvolvido para a disciplina de Algoritmo
 ---
 
 ### 6. Busca por campo com busca indexada
-* Executa a mesma busca por campo que a funcionalidade 4: [Busca de Registro por campo](#3.-busca-de-registros-por-campo)
+* Executa a mesma busca por campo que a funcionalidade 3: [Busca de Registro por campo](#3-busca-de-registros-por-campo)
 * No entanto, se um dos campos da busca for o código estação, a busca é feita através do arquivo índices.
 * A busca indexada localiza o registro com código estação buscado no arquivo índices e recupera seu RRN.
 * Através do RRN o registro é localizado no arquivo Estacoes.bin, e os demais campos da busca são comparados com os do registro.
