@@ -37,6 +37,7 @@ Sistema de manipulação de arquivos desenvolvido para a disciplina de Algoritmo
   
 * Além do arquivo Estacoes.bin, o sistema também manipula um arquivo binário Estacoes_Indice.bin. Cada registro deste arquivo também representa uma estação, mas contem apenas o código da estação e RRN dentro do arquivo Estacoes.bin
 * Para a manipulação dos registros foram desenvovidas 9 funcionalidades, que serão descritas futuramente.
+<br>
 
 ## 🧑🏿‍💻 Operação do sistema
 * Para utilizar as funcionalidades do sistema, o usuário deve primeiro escolher uma especificando seu número.
@@ -48,16 +49,23 @@ Sistema de manipulação de arquivos desenvolvido para a disciplina de Algoritmo
 
 ## 🖥️ Funcionalidades
 ### 1. Criar arquivo binário
-* A funcionalidade lê e processa as estações fornecidas por um arquivo.csv transformando-as em registros de dados que são escritos em um arquivo binário.
-* Esta funcionalidade cria o arquivo Estacoes.bin
+* A funcionalidade lê e processa as estações fornecidas por um arquivo .csv transformando-as em registros de dados que são escritos em um arquivo binário.
+* Esta funcionalidade cria o arquivo que chamamos de Estacoes.bin.
+* O usuário deve fornecer o nome do arquivo csv e o nome do arquivo binário a ser criado.
 <br>
 
 ### 2. Imprimir registros
-* A funcionaldiade lê e processa todos os registros de arquivo binário e imprime-os na saída padrão.
+* A funcionaldiade lê e processa todos os registros de um arquivo binário [Estacoes.bin] e imprime-os na saída padrão.
+* O usuário deve fornecer o nome do arquivo binário.
 <br>
 
 ### 3. Busca de registros por campo
 * Esta funcionalidade recupera todos os registros no arquivo binário que correspondam a um determinado critério de busca.
+* Podem ser realizadas 1 ou mais buscas por essa funcionalidade.
+* Podem ser buscados 1 ou mais campos por busca.
+* O usuário deve fornecer o nome do arquivo binário, a quantidade de buscas e, para cada busca, a quantidade de campos buscados.
+
+* 
 <br>
 
 ### 4. Busca de registro por RRN
