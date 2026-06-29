@@ -52,27 +52,41 @@ Sistema de manipulação de arquivos desenvolvido para a disciplina de Algoritmo
 * A funcionalidade lê e processa as estações fornecidas por um arquivo .csv transformando-as em registros de dados que são escritos em um arquivo binário.
 * Esta funcionalidade cria o arquivo que chamamos de Estacoes.bin.
 * O usuário deve fornecer o nome do arquivo csv e o nome do arquivo binário a ser criado.
-<br>
+
+---
 
 ### 2. Imprimir registros
 * A funcionaldiade lê e processa todos os registros de um arquivo binário [Estacoes.bin] e imprime-os na saída padrão.
 * O usuário deve fornecer o nome do arquivo binário.
-<br>
+
+---
 
 ### 3. Busca de registros por campo
 * Esta funcionalidade recupera todos os registros no arquivo binário que correspondam a um determinado critério de busca.
-* Podem ser realizadas 1 ou mais buscas por essa funcionalidade.
+* Podem ser realizadas 1 ou mais buscas por execução desta funcionalidade.
 * Podem ser buscados 1 ou mais campos por busca.
 * O usuário deve fornecer o nome do arquivo binário, a quantidade de buscas e, para cada busca, a quantidade de campos buscados.
 
-* 
-<br>
+---
 
 ### 4. Busca de registro por RRN
+* Esta funcionalidade recupera um registro do arquivo binário dado seu RRN (número relativo de registro)
+* O usuário deve fornecer o nome do arquivo binário e o RRN buscado
+
+---
 
 ### 5. Criação de um arquivo índice
+* Esta funcionalidade cria um arquivo binário índice [Estacoes_Indice.bin] a partir do arquivo binário principal [Estacoes.bin]
+* Para cada registro do arquivo Estacoes.bin é criado um registro no arquivo índices que contém o **RRN do registro** e o **código da estação**.
+* Este arquivo é utilizado para a realização da **busca indexada** e seus registros são ordenados pelo código da estação.
+
+---
 
 ### 6. Busca por campo com busca indexada
+* Executa a mesma busca por campo que a [funcionalidade 4.Busca de Registro por campo](###3.-busca-de-registros-por-campo)
+* No entanto, se um dos campos da busca for o código estação, a busca é feita através do arquivo índices.
+* A busca indexada localiza o registro com código estação buscado no arquivo índices e recupera seu RRN.
+* Através do RRN o registro é localizado no arquivo Estacoes.bin, e os demais campos da busca são comparados com os do registro.
 
 ### 7. Remoção de registros
 
